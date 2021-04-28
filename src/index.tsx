@@ -1,17 +1,63 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
 import App from './App';
-import reportWebVitals from './reportWebVitals';
+import { BrowserRouter as Router } from 'react-router-dom';
+import { Provider } from 'react-redux';
+import { store } from './redux/store';
+import styled, { createGlobalStyle } from 'styled-components';
+
+const Global = createGlobalStyle`
+  * {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: 'Rubik', sans-serif;
+    text-decoration: none;
+    &::selection {
+      background-color: #f1b32e;
+      color: #fff;
+    }
+  }
+  html {
+    &::-webkit-scrollbar {
+      width: 0;
+    }
+    -ms-overflow-style: none;
+    overflow: -moz-scrollbars-none;
+  }
+  body,
+  html {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    background-color: #181818;
+    color: #fff;
+    
+  }
+  ol,
+  ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    margin: 0;
+    padding: 0;
+  }
+  p {
+    padding: 0;
+    margin: 0;
+  }
+`;
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <Router>
+      <Provider store={store}>
+        <Global />
+        <App />
+      </Provider>
+    </Router>
   </React.StrictMode>,
-  document.getElementById('root')
+  document.getElementById('root'),
 );
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();

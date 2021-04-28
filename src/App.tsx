@@ -1,24 +1,21 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { Route } from 'react-router';
+import styled from 'styled-components';
+import { Anime, Header } from './components';
+import { AnimeInfo } from './pages';
+
+export const Container = styled.div`
+  max-width: 1430px;
+  padding: 0 15px;
+  margin: 0 auto;
+`;
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="app">
+      <Header />
+      <Route exact path="/" component={Anime} />
+      <Route path="/info" component={AnimeInfo} />
     </div>
   );
 }
