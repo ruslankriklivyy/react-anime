@@ -2,7 +2,7 @@ import React from 'react';
 import { Route } from 'react-router';
 import styled from 'styled-components';
 import { Anime, Header } from './components';
-import { AnimeInfo } from './pages';
+import { AnimeInfo, Users } from './pages';
 
 export const Container = styled.div`
   max-width: 1430px;
@@ -16,6 +16,7 @@ function App() {
       <Header />
       <Route exact path="/" component={Anime} />
       <Route path="/info" component={AnimeInfo} />
+      <Route path="/users" component={Users} />
     </div>
   );
 }

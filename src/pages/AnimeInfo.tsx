@@ -2,13 +2,51 @@ import React from 'react';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { getGenresAnime, getOneAnime, setAnimeId } from '../redux/anime';
+import {
+  getEpisodesAnime,
+  getGenresAnime,
+  getOneAnime,
+  getReviewsAnime,
+  setAnimeId,
+} from '../redux/anime';
 import { Container } from '../App';
 import { RootState } from '../redux';
 
 import starSvg from '../assets/img/star.svg';
+import { AnimeReviewsAttributes, AnimeReviewsData, AttributesGenres, Genres } from '../types/types';
+import { AnimeEpisodes, AnimeReviewsItem, AnimeTrailer, Button } from '../components';
 
-const AnimeInfoWrapper = styled.div``;
+import scrollTop from '../utils/scrollTop';
+
+const AnimeInfoWrapper = styled.div`
+  position: relative;
+  .slick-arrow {
+    display: block;
+    position: absolute;
+    top: -90px;
+    z-index: 500;
+    &:before {
+      font-size: 35px;
+      transition: all 0.3s ease;
+    }
+  }
+  .slick-next {
+    right: 0;
+  }
+  .slick-prev {
+    right: 50px !important;
+    left: auto;
+  }
+  .slick-slide {
+    display: inline-flex;
+    justify-content: flex-start;
+  }
+  .slick-slide > div {
+    width: 310px !important;
+    height: 240px !important;
+    margin: 0 auto;
+  }
+`;
 
 const AnimeInfoBox = styled.div``;
 
@@ -92,22 +130,49 @@ const AnimeInfoGenre = styled.button`
   letter-spacing: 1px;
 `;
 
-export const Box = styled.div`
-  display: inline-flex;
-  background-color: #212121;
-  padding: 55px 40px;
-  border-radius: 30px;
+const AnimeInfoGenres = styled.div`
+  margin-bottom: 35px;
 `;
+
+export const Box = styled.div`
+  position: relative;
+  display: ${(props: AnimeBox) => (props.slider ? 'block' : 'flex')};
+  background-color: #212121;
+  width: 100%;
+  ${(props: AnimeBox) => (props.reviews ? 'min-height: 0;' : 'min-height: 250px;')}
+  ${(props: AnimeBox) => (props.reviews ? 'padding: 25px;' : 'padding: 55px;')}
+  border-radius: 40px;
+  z-index: 10;
+  ${(props: AnimeBox) => (props.slider || props.reviews ? 'border-top-left-radius: 0;' : '')};
+`;
+
+interface AnimeBox {
+  slider: boolean;
+  reviews: boolean;
+}
 
 const AnimeInfo = () => {
   const dispatch = useDispatch();
   const animeId = useSelector((state: RootState) => state.anime.animeId);
   const animeItem = useSelector((state: RootState) => state.anime.chosenAnime);
   const genresAnime = useSelector((state: RootState) => state.anime.genresAnime);
-  const { posterImage, titles, startDate, description, averageRating } =
+  const { posterImage, titles, startDate, synopsis, averageRating, youtubeVideoId } =
     animeItem.hasOwnProperty('data') && animeItem.data.attributes;
 
-  console.log(genresAnime);
+  const [visibleTrailer, setVisibleTrailer] = React.useState(false);
+
+  const closeTrailer = React.useCallback(() => {
+    setVisibleTrailer(false);
+  }, []);
+
+  const openTrailer = () => {
+    setVisibleTrailer(true);
+    scrollTop();
+  };
+
+  React.useEffect(() => {
+    scrollTop();
+  }, []);
 
   React.useEffect(() => {
     dispatch(getOneAnime({ animeId }));
@@ -131,29 +196,41 @@ const AnimeInfo = () => {
   return (
     <AnimeInfoWrapper>
       <Container>
-        {animeItem.hasOwnProperty('data') && (
-          <AnimeInfoBox>
-            <Box>
-              <div>
-                <AnimeImage src={posterImage.medium} />
-              </div>
-              <AnimeInfoMain>
-                <AnimeRating>
-                  <img src={starSvg} alt="star svg" />
-                  <span>{averageRating}</span>
-                </AnimeRating>
-                <AnimeInfoTop>
-                  <AnimeInfoName>{titles.en || titles.en_jp}</AnimeInfoName>
-                  <AnimeInfoDate>{startDate.slice(0, 4)}</AnimeInfoDate>
-                </AnimeInfoTop>
-                <AnimeInfoDescr>{description}</AnimeInfoDescr>
-                {genresAnime?.map((genre: any) => (
-                  <AnimeInfoGenre key={genre.id}>{genre.attributes.name}</AnimeInfoGenre>
-                ))}
-              </AnimeInfoMain>
-            </Box>
-          </AnimeInfoBox>
-        )}
+        <AnimeTrailer
+          youtubeVideoId={youtubeVideoId}
+          visibleTrailer={visibleTrailer}
+          closeTrailer={closeTrailer}
+        />
+        <AnimeInfoBox>
+          <Box>
+            {animeItem.hasOwnProperty('data') && (
+              <>
+                <div>
+                  <AnimeImage src={posterImage.medium} />
+                </div>
+                <AnimeInfoMain>
+                  <AnimeRating>
+                    <img src={starSvg} alt="star svg" />
+                    <span>{averageRating}</span>
+                  </AnimeRating>
+                  <AnimeInfoTop>
+                    <AnimeInfoName>{titles.en || titles.en_jp}</AnimeInfoName>
+                    <AnimeInfoDate>{startDate.slice(0, 4)}</AnimeInfoDate>
+                  </AnimeInfoTop>
+                  <AnimeInfoDescr>{synopsis}</AnimeInfoDescr>
+                  <AnimeInfoGenres>
+                    {genresAnime?.map((genre: Genres) => (
+                      <AnimeInfoGenre key={genre.id}>{genre.attributes.name}</AnimeInfoGenre>
+                    ))}
+                  </AnimeInfoGenres>
+                  <Button onClick={() => openTrailer()}>Watch Trailer</Button>
+                </AnimeInfoMain>
+              </>
+            )}
+          </Box>
+        </AnimeInfoBox>
+        <AnimeEpisodes />
+        <AnimeReviewsItem />
       </Container>
     </AnimeInfoWrapper>
   );

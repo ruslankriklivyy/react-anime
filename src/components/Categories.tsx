@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 const CategoriesWrapper = styled.ul`
@@ -21,6 +22,8 @@ const CategoriesWrapper = styled.ul`
           visibility: visible;
           opacity: 1;
         }
+      }
+      &.open-genres {
       }
       &:active {
         transform: translateY(5px);
@@ -47,16 +50,25 @@ const CategoriesWrapper = styled.ul`
   }
 `;
 
-const categoriesArr = ['Home', 'Popular', 'Genres', 'Help'];
+const categoriesArr = ['Home', 'Popular', 'Users'];
 
-const Categories = () => {
+interface ICategories {
+  toggleVisibleGenres: (e: React.MouseEvent) => void;
+}
+
+const Categories: React.FC<ICategories> = ({ toggleVisibleGenres }) => {
   return (
     <CategoriesWrapper>
       {categoriesArr.map((name, index) => (
         <li key={index}>
-          <a href="/">{name}</a>
+          <Link to={`/${name.toLowerCase()}`}>{name}</Link>
         </li>
       ))}
+      <li>
+        <a href="/" className="open-genres" onClick={(e) => toggleVisibleGenres(e)}>
+          Genres
+        </a>
+      </li>
     </CategoriesWrapper>
   );
 };

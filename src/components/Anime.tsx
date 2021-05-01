@@ -4,11 +4,9 @@ import styled from 'styled-components';
 import Slider from 'react-slick';
 
 import { RootState } from '../redux';
-import { getAnime, setAnimeId } from '../redux/anime';
+import { getAnime, getFavoritesAnime, setAnimeId } from '../redux/anime';
 import { Container } from '../App';
-
-import starSvg from '../assets/img/star.svg';
-import { Link } from 'react-router-dom';
+import { AnimeItem } from '.';
 
 const AnimeWrapper = styled.section`
   position: relative;
@@ -43,76 +41,8 @@ const AnimeWrapper = styled.section`
   }
 `;
 
-const AnimeBox = styled.div``;
-
-const AnimeImage = styled.img`
-  display: block;
-  width: 100%;
-  height: 100%;
-  border-radius: 20px;
-  object-fit: cover;
-`;
-
-const AnimeBlockout = styled.div`
-  border-radius: 20px;
-  position: absolute;
-  opacity: 0;
-  top: 0;
-  right: 0;
-  left: 0;
-  bottom: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.6);
-  transition: all 0.4s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  z-index: 50;
-  h2 {
-    font-size: 27px;
-    letter-spacing: 1px;
-  }
-`;
-
-const AnimeItem = styled.div`
-  position: relative;
-  color: #fff;
-  width: 300px !important;
-  height: 360px !important;
-  border-radius: 20px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  &:active {
-    transform: translateY(7px);
-  }
-  &:hover ${AnimeBlockout} {
-    opacity: 1;
-  }
-`;
-
-const AnimeRating = styled.div`
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  display: flex;
-  align-items: center;
-  width: 90px;
-  height: 28px;
-  border-radius: 20px;
-  background: rgba(0, 0, 0, 0.7);
-  z-index: 100;
-  padding: 0 10px;
-  img {
-    display: block;
-    width: 15px;
-    height: 15px;
-    margin-right: 7px;
-  }
-  span {
-    font-size: 15px;
-  }
+const AnimeBox = styled.div`
+  margin-bottom: 45px;
 `;
 
 const TitleMain = styled.h2`
@@ -122,6 +52,7 @@ const TitleMain = styled.h2`
   font-size: 28px;
   margin-bottom: 30px;
   padding-bottom: 7px;
+  text-transform: capitalize;
   &::before {
     content: '';
     position: absolute;
@@ -134,9 +65,19 @@ const TitleMain = styled.h2`
   }
 `;
 
+const AnimeAllBox = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+`;
+
 const Anime = () => {
   const dispatch = useDispatch();
+  const animeFavorites = useSelector((state: RootState) => state.anime.animeFavoritesItems);
   const anime = useSelector((state: RootState) => state.anime.animeItems);
+  const animeSeacrhValue = useSelector((state: RootState) => state.filters.animeSearchValue);
+  const animeCurrentGenre = useSelector((state: RootState) => state.filters.currentGenre);
 
   const onSelectAnime = (id: number) => {
     dispatch(setAnimeId(id));
@@ -145,6 +86,7 @@ const Anime = () => {
   const settings = {
     dots: false,
     infinite: true,
+    autoPlay: true,
     speed: 500,
     slidesToShow: 4,
     slidesToScroll: 3,
@@ -177,28 +119,27 @@ const Anime = () => {
     dispatch(getAnime());
   }, [dispatch]);
 
+  React.useEffect(() => {
+    dispatch(getFavoritesAnime({ animeSeacrhValue, animeCurrentGenre }));
+  }, [dispatch, animeSeacrhValue, animeCurrentGenre]);
+
   return (
     <AnimeWrapper>
       <Container>
-        <TitleMain>Recently Added</TitleMain>
+        <TitleMain>Top Rating</TitleMain>
         <AnimeBox>
           <Slider {...settings}>
-            {anime.data?.map((item: any) => (
-              <Link to="info">
-                <AnimeItem key={item.id} onClick={() => onSelectAnime(item.id)}>
-                  <AnimeBlockout>
-                    <h2>{item.attributes.titles.en || item.attributes.titles.en_jp}</h2>
-                  </AnimeBlockout>
-                  <AnimeRating>
-                    <img src={starSvg} alt="star svg" />
-                    <span>{item.attributes.averageRating}</span>
-                  </AnimeRating>
-                  <AnimeImage src={item.attributes.posterImage.medium} />
-                </AnimeItem>
-              </Link>
+            {anime?.map((item) => (
+              <AnimeItem key={item.id} item={item} selectItem={onSelectAnime} />
             ))}
           </Slider>
         </AnimeBox>
+        <TitleMain>{animeCurrentGenre ? animeCurrentGenre : 'All Anime'}</TitleMain>
+        <AnimeAllBox>
+          {animeFavorites?.map((item) => (
+            <AnimeItem key={item.id} item={item} selectItem={onSelectAnime} />
+          ))}
+        </AnimeAllBox>
       </Container>
     </AnimeWrapper>
   );
