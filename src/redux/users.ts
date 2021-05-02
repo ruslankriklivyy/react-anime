@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { usersApi } from '../api/api';
 import { UsersRespones } from '../types/types';
 
@@ -15,7 +15,7 @@ const users = createSlice({
   name: 'users',
   initialState,
   reducers: {
-    setUsers: (state, action) => {
+    setUsers: (state, action: PayloadAction<UsersRespones>) => {
       state.users = action.payload;
     },
   },

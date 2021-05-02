@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { filtersApi } from '../api/api';
 import { GenresResponse } from '../types/types';
 
@@ -17,13 +17,13 @@ const filters = createSlice({
   name: 'filters',
   initialState,
   reducers: {
-    setAnimeSearchValue: (state, action) => {
+    setAnimeSearchValue: (state, action: PayloadAction<string>) => {
       state.animeSearchValue = action.payload;
     },
-    setGenres: (state, action) => {
+    setGenres: (state, action: PayloadAction<GenresResponse>) => {
       state.animeGenres = action.payload;
     },
-    setCurrentGenre: (state, action) => {
+    setCurrentGenre: (state, action: PayloadAction<string>) => {
       state.currentGenre = action.payload;
     },
   },

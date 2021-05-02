@@ -14,7 +14,7 @@ function App() {
   return (
     <div className="app">
       <Header />
-      <Route exact path="/" component={Anime} />
+      <Route exact path={['/', '/home']} component={Anime} />
       <Route path="/info" component={AnimeInfo} />
       <Route path="/users" component={Users} />
     </div>

@@ -1,16 +1,30 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { animeApi } from '../api/api';
-import { Anime, AnimeRespone, AnimeReviewsResponse, Genres } from '../types/types';
+import {
+  Anime,
+  AnimeEpisodesResponse,
+  AnimeOneResponse,
+  AnimeReviewsResponse,
+  Genres,
+} from '../types/types';
 
 const initialState = {
   animeItems: [] as Array<Anime>,
   animeFavoritesItems: [] as Array<Anime>,
-  chosenAnime: {} as AnimeRespone,
+  chosenAnime: {} as AnimeOneResponse,
   genresAnime: [] as Array<Genres>,
-  episodesAnime: {} as any,
+  episodesAnime: {} as AnimeEpisodesResponse,
   animeReviews: null as AnimeReviewsResponse | null,
   animeId: null as number | null,
 };
+
+interface IGetFavoritesAnime {
+  animeSeacrhValue: string;
+  animeCurrentGenre: string | null;
+}
+interface IAnimeId {
+  animeId: number | null;
+}
 
 export const getAnime = createAsyncThunk('anime/getAnime', async (props, thunkAPI) => {
   const data = await animeApi.fetchAnime();
@@ -19,7 +33,7 @@ export const getAnime = createAsyncThunk('anime/getAnime', async (props, thunkAP
 
 export const getFavoritesAnime = createAsyncThunk(
   'anime/getFavoritesAnime',
-  async (props: any, thunkApi) => {
+  async (props: IGetFavoritesAnime, thunkApi) => {
     const data = await animeApi.fetchFavoritesAnime(
       props.animeSeacrhValue,
       props.animeCurrentGenre,
@@ -28,14 +42,17 @@ export const getFavoritesAnime = createAsyncThunk(
   },
 );
 
-export const getOneAnime = createAsyncThunk('anime/getOneAnime', async (props: any, thunkAPI) => {
-  const data = await animeApi.fetchOneAnime(props.animeId);
-  thunkAPI.dispatch(setChosenAnime(data));
-});
+export const getOneAnime = createAsyncThunk(
+  'anime/getOneAnime',
+  async (props: IAnimeId, thunkAPI) => {
+    const data = await animeApi.fetchOneAnime(props.animeId);
+    thunkAPI.dispatch(setChosenAnime(data));
+  },
+);
 
 export const getGenresAnime = createAsyncThunk(
   'anime/getGenresAnime',
-  async (props: any, thunkApi) => {
+  async (props: IAnimeId, thunkApi) => {
     const data = await animeApi.fetchGenresAnime(props.animeId);
     thunkApi.dispatch(setGenresAnime(data));
   },
@@ -43,7 +60,7 @@ export const getGenresAnime = createAsyncThunk(
 
 export const getEpisodesAnime = createAsyncThunk(
   'anime/getEpisodesAnime',
-  async (props: any, thunkApi) => {
+  async (props: IAnimeId, thunkApi) => {
     const data = await animeApi.fetchEpisodesAnime(props.animeId);
     thunkApi.dispatch(setEpisodesAnime(data));
   },
@@ -51,7 +68,7 @@ export const getEpisodesAnime = createAsyncThunk(
 
 export const getReviewsAnime = createAsyncThunk(
   'anime/getReviewsAnime',
-  async (props: any, thunkApi) => {
+  async (props: IAnimeId, thunkApi) => {
     const data = await animeApi.fetchReviewsAnime(props.animeId);
     thunkApi.dispatch(setReviewsAnime(data));
   },
@@ -61,25 +78,25 @@ const anime = createSlice({
   name: 'anime',
   initialState,
   reducers: {
-    setAnimeItems: (state, action) => {
+    setAnimeItems: (state, action: PayloadAction<Array<Anime>>) => {
       state.animeItems = action.payload;
     },
-    setFavoritesAnimeItems: (state, action) => {
+    setFavoritesAnimeItems: (state, action: PayloadAction<Array<Anime>>) => {
       state.animeFavoritesItems = action.payload;
     },
-    setChosenAnime: (state, action) => {
+    setChosenAnime: (state, action: PayloadAction<AnimeOneResponse>) => {
       state.chosenAnime = action.payload;
     },
-    setGenresAnime: (state, action) => {
+    setGenresAnime: (state, action: PayloadAction<Array<Genres>>) => {
       state.genresAnime = action.payload;
     },
-    setEpisodesAnime: (state, action) => {
+    setEpisodesAnime: (state, action: PayloadAction<AnimeEpisodesResponse>) => {
       state.episodesAnime = action.payload;
     },
-    setReviewsAnime: (state, action) => {
+    setReviewsAnime: (state, action: PayloadAction<AnimeReviewsResponse>) => {
       state.animeReviews = action.payload;
     },
-    setAnimeId: (state, action) => {
+    setAnimeId: (state, action: PayloadAction<number>) => {
       state.animeId = action.payload;
     },
   },

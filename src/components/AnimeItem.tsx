@@ -44,9 +44,9 @@ const AnimeItemWrapper = styled.div`
   width: 300px !important;
   height: 360px !important;
   border-radius: 20px;
-  margin-bottom: 30px;
   cursor: pointer;
   transition: all 0.3s ease;
+
   &:active {
     transform: translateY(7px);
   }

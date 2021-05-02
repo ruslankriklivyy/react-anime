@@ -1,15 +1,34 @@
 import axios from 'axios';
-import { AnimeReviewsResponse, Genres, GenresResponse, UsersRespones } from '../types/types';
+import {
+  Anime,
+  AnimeOneResponse,
+  AnimeResponse,
+  AnimeReviewsResponse,
+  Genres,
+  GenresResponse,
+  UsersRespones,
+} from '../types/types';
 
 const instance = axios.create({
   baseURL: 'https://kitsu.io/api/edge/',
 });
 
+const $auth = axios.create({
+  baseURL: 'https://kitsu.io/api/',
+  headers: {
+    CLIENT_ID: '',
+    CLIENT_SECRET: '',
+  },
+});
+
 export const animeApi = {
-  fetchAnime() {
+  fetchAnime(): Promise<Array<Anime>> {
     return instance.get(`anime?sort=-averageRating`).then(({ data }) => data.data);
   },
-  fetchFavoritesAnime(animeSeacrhValue: string, animeCurrentGenre: string | null) {
+  fetchFavoritesAnime(
+    animeSeacrhValue: string,
+    animeCurrentGenre: string | null,
+  ): Promise<Array<Anime>> {
     return instance
       .get(
         `anime?sort=-favoritesCount&page[limit]=12${
@@ -18,16 +37,16 @@ export const animeApi = {
       )
       .then(({ data }) => data.data);
   },
-  fetchOneAnime(animeId: number) {
+  fetchOneAnime(animeId: number | null): Promise<AnimeOneResponse> {
     return instance.get(`anime/${animeId}`).then(({ data }) => data);
   },
-  fetchGenresAnime(animeId: number): Promise<Array<Genres>> {
+  fetchGenresAnime(animeId: number | null): Promise<Array<Genres>> {
     return instance.get(`anime/${animeId}/genres`).then(({ data }) => data.data);
   },
-  fetchEpisodesAnime(animeId: number) {
+  fetchEpisodesAnime(animeId: number | null) {
     return instance.get(`anime/${animeId}/episodes`).then(({ data }) => data);
   },
-  fetchReviewsAnime(animeId: number): Promise<AnimeReviewsResponse> {
+  fetchReviewsAnime(animeId: number | null): Promise<AnimeReviewsResponse> {
     return instance.get(`anime/${animeId}/reviews`).then(({ data }) => data);
   },
 };
@@ -35,6 +54,21 @@ export const animeApi = {
 export const usersApi = {
   fetchUsers(): Promise<UsersRespones> {
     return instance.get(`users?page[limit]=20`).then(({ data }) => data);
+  },
+};
+
+export const authApi = {
+  login() {
+    return $auth
+      .post('oauth/token', {
+        grant_type: 'password',
+        username: 'ruslankriklivyy@gmail.com',
+        password: 'ZZ2002fagotsgg2002',
+      })
+      .then(({ data }) => {
+        console.log(data);
+        return data;
+      });
   },
 };
 

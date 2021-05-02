@@ -26,10 +26,6 @@ export type AnimeTitles = {
   en_jp: string;
 };
 
-export type AnimeRespone = {
-  data: Anime;
-};
-
 export type AttributesAnime = {
   averageRating: string;
   coverImage: Image;
@@ -48,6 +44,14 @@ export type Anime = {
   attributes: AttributesAnime | any;
   id: string;
   type: string;
+};
+
+export type AnimeResponse = {
+  data: Array<Anime>;
+};
+
+export type AnimeOneResponse = {
+  data: Anime;
 };
 
 export type ThumbnailEpisodes = {
@@ -70,6 +74,10 @@ export type AnimeEpisodes = {
   attributes: AttributesAnimeEpisodes | any;
   id: string;
   type: string;
+};
+
+export type AnimeEpisodesResponse = {
+  data: Array<AnimeEpisodes>;
 };
 
 export type UsersAttributes = {

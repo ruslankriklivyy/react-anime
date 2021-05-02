@@ -3,7 +3,6 @@ export { default as Categories } from './Categories';
 export { default as HeaderActions } from './HeaderActions';
 export { default as Anime } from './Anime';
 export { default as Button } from './Button';
-export { default as AnimeFavorites } from './AnimeFavorites';
 export { default as AnimeItem } from './AnimeItem';
 export { default as AnimeEpisodes } from './AnimeEpisodes';
 export { default as AnimeTrailer } from './AnimeTrailer';
