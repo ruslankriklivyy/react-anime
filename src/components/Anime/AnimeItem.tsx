@@ -1,11 +1,10 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 
 import { Link } from 'react-router-dom';
 
-import starSvg from '../assets/img/star.svg';
-import { Anime } from '../types/types';
+import starSvg from '../../assets/img/star.svg';
+import { Anime } from '../../types/types';
 
 const AnimeImage = styled.img`
   display: block;

@@ -3,10 +3,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import Slider from 'react-slick';
 
-import { RootState } from '../redux';
-import { getAnime, getFavoritesAnime, setAnimeId } from '../redux/anime';
-import { Container } from '../App';
-import { AnimeItem, AnimeItemLoader } from '.';
+import { RootState } from '../../redux';
+import { getAnime, getFavoritesAnime, setAnimeId } from '../../redux/anime';
+import { Container } from '../../App';
+import { AnimeItem, AnimeItemLoader } from '..';
 
 const AnimeWrapper = styled.section`
   position: relative;
@@ -76,11 +76,10 @@ const AnimeAllBox = styled.div`
 
 const Anime = () => {
   const dispatch = useDispatch();
-  const animeFavorites = useSelector((state: RootState) => state.anime.animeFavoritesItems);
-  const isLoading = useSelector((state: RootState) => state.anime.isLoading);
-  const anime = useSelector((state: RootState) => state.anime.animeItems);
-  const animeSeacrhValue = useSelector((state: RootState) => state.filters.animeSearchValue);
-  const animeCurrentGenre = useSelector((state: RootState) => state.filters.currentGenre);
+  const { animeItems, animeFavoritesItems, isLoading } = useSelector(
+    (state: RootState) => state.anime,
+  );
+  const { currentGenre, animeSearchValue } = useSelector((state: RootState) => state.filters);
 
   const onSelectAnime = (id: number) => {
     dispatch(setAnimeId(id));
@@ -125,8 +124,8 @@ const Anime = () => {
   }, [dispatch]);
 
   React.useEffect(() => {
-    dispatch(getFavoritesAnime({ animeSeacrhValue, animeCurrentGenre }));
-  }, [dispatch, animeSeacrhValue, animeCurrentGenre]);
+    dispatch(getFavoritesAnime({ animeSearchValue, currentGenre }));
+  }, [dispatch, animeSearchValue, currentGenre]);
 
   return (
     <AnimeWrapper>
@@ -135,7 +134,7 @@ const Anime = () => {
         <AnimeBox>
           <Slider {...settings}>
             {isLoading
-              ? anime?.map((item) => (
+              ? animeItems?.map((item) => (
                   <AnimeItem key={item.id} item={item} selectItem={onSelectAnime} />
                 ))
               : Array(12)
@@ -143,10 +142,10 @@ const Anime = () => {
                   .map((_, index) => <AnimeItemLoader key={index} />)}
           </Slider>
         </AnimeBox>
-        <TitleMain>{animeCurrentGenre ? animeCurrentGenre : 'All Anime'}</TitleMain>
+        <TitleMain>{currentGenre ?? 'All Anime'}</TitleMain>
         <AnimeAllBox>
           {isLoading
-            ? animeFavorites?.map((item) => (
+            ? animeFavoritesItems?.map((item) => (
                 <AnimeItem key={item.id} item={item} selectItem={onSelectAnime} />
               ))
             : Array(12)

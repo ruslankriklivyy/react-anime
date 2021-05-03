@@ -21,8 +21,8 @@ const initialState = {
 };
 
 interface IGetFavoritesAnime {
-  animeSeacrhValue: string;
-  animeCurrentGenre: string | null;
+  animeSearchValue: string;
+  currentGenre: string | null;
 }
 interface IAnimeId {
   animeId: number | null;
@@ -39,10 +39,7 @@ export const getFavoritesAnime = createAsyncThunk(
   'anime/getFavoritesAnime',
   async (props: IGetFavoritesAnime, thunkAPI) => {
     thunkAPI.dispatch(setIsLoading(false));
-    const data = await animeApi.fetchFavoritesAnime(
-      props.animeSeacrhValue,
-      props.animeCurrentGenre,
-    );
+    const data = await animeApi.fetchFavoritesAnime(props.animeSearchValue, props.currentGenre);
     thunkAPI.dispatch(setFavoritesAnimeItems(data));
     thunkAPI.dispatch(setIsLoading(true));
   },

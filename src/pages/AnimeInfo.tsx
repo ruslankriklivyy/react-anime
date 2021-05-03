@@ -6,8 +6,6 @@ import { useCookies } from 'react-cookie';
 import { getGenresAnime, getOneAnime, setAnimeId } from '../redux/anime';
 import { Container } from '../App';
 import { RootState } from '../redux';
-
-import starSvg from '../assets/img/star.svg';
 import { Genres } from '../types/types';
 import {
   AnimeEpisodes,
@@ -19,6 +17,7 @@ import {
 import scrollTop from '../utils/scrollTop';
 
 import plusSvg from '../assets/img/plus.svg';
+import starSvg from '../assets/img/star.svg';
 
 const AnimeInfoWrapper = styled.div`
   position: relative;
@@ -50,7 +49,9 @@ const AnimeInfoWrapper = styled.div`
   }
 `;
 
-const AnimeInfoBox = styled.div``;
+const AnimeInfoBox = styled.div`
+  position: relative;
+`;
 
 const AnimeImage = styled.img`
   display: block;
@@ -104,8 +105,8 @@ const AnimeRating = styled.div`
   display: flex;
   align-items: center;
   position: absolute;
-  top: 0;
-  right: 0;
+  top: 55px;
+  right: 55px;
   img {
     display: block;
     width: 22px;
@@ -142,7 +143,6 @@ const AnimeInfoGenres = styled.div`
 `;
 
 export const Box = styled.div`
-  position: relative;
   display: ${(props: AnimeBox) => (props.slider ? 'block' : 'flex')};
   background-color: #212121;
   width: 100%;
@@ -181,14 +181,14 @@ interface AnimeBox {
 
 const AnimeInfo = () => {
   const dispatch = useDispatch();
-  const animeId = useSelector((state: RootState) => state.anime.animeId);
-  const animeItem = useSelector((state: RootState) => state.anime.chosenAnime);
-  const genresAnime = useSelector((state: RootState) => state.anime.genresAnime);
-  const isLoadingInfo = useSelector((state: RootState) => state.anime.isLoadingInfo);
+  const { chosenAnime, animeId, genresAnime, isLoadingInfo } = useSelector(
+    (state: RootState) => state.anime,
+  );
   const { posterImage, titles, startDate, synopsis, averageRating, youtubeVideoId } =
-    animeItem.hasOwnProperty('data') && animeItem.data.attributes;
+    chosenAnime.hasOwnProperty('data') && chosenAnime.data.attributes;
 
   const [visibleTrailer, setVisibleTrailer] = React.useState(false);
+
   const [cookies, setCookie] = useCookies(['animeId']);
 
   const closeTrailer = React.useCallback(() => {
@@ -239,11 +239,11 @@ const AnimeInfo = () => {
                 <div>
                   <AnimeImage src={posterImage.medium} />
                 </div>
+                <AnimeRating>
+                  <img src={starSvg} alt="star svg" />
+                  <span>{averageRating}</span>
+                </AnimeRating>
                 <AnimeInfoMain>
-                  <AnimeRating>
-                    <img src={starSvg} alt="star svg" />
-                    <span>{averageRating}</span>
-                  </AnimeRating>
                   <AnimeInfoTop>
                     <AnimeInfoName>{titles.en || titles.en_jp}</AnimeInfoName>
                     <AnimeInfoDate>{startDate.slice(0, 4)}</AnimeInfoDate>

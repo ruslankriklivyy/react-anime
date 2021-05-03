@@ -3,10 +3,11 @@ import Slider from 'react-slick';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { AnimeReviewsAttributes, AnimeReviewsData, AttributesGenres, Genres } from '../types/types';
-import { RootState } from '../redux';
-import { Box } from '../pages/AnimeInfo';
-import { getEpisodesAnime } from '../redux/anime';
+import { RootState } from '../../redux';
+import { Box } from '../../pages/AnimeInfo';
+import { getEpisodesAnime } from '../../redux/anime';
+
+import episodesEmptyJpg from '../../assets/img/episodes-empty.jpg';
 
 const AnimeEpisodeNumber = styled.div`
   position: absolute;
@@ -91,8 +92,7 @@ const AnimeSeasonNumber = styled.span`
 
 const AnimeEpisodes = () => {
   const dispatch = useDispatch();
-  const animeId = useSelector((state: RootState) => state.anime.animeId);
-  const animeEpisodes = useSelector((state: RootState) => state.anime.episodesAnime);
+  const { episodesAnime, animeId } = useSelector((state: RootState) => state.anime);
 
   const settings = {
     dots: false,
@@ -131,22 +131,25 @@ const AnimeEpisodes = () => {
 
   return (
     <>
-      {animeEpisodes?.data && (
+      {episodesAnime?.data && (
         <AnimeEpisodesWrapper>
           <AnimeSeasonNumber>
-            Season {animeEpisodes?.data[0].attributes.seasonNumber}
+            Season {episodesAnime?.data[0].attributes.seasonNumber}
           </AnimeSeasonNumber>
           <Box slider>
             <AnimeEpisodesSlider>
               <Slider {...settings}>
-                {animeEpisodes.data?.map(({ attributes }: any) => (
+                {episodesAnime.data?.map(({ attributes }) => (
                   <>
                     <AnimeEpisode>
                       <AnimeEpisodeBlockOut>
-                        <h2>{attributes.canonicalTitle}</h2>
+                        <h2>{attributes.canonicalTitle || 'No information'}</h2>
                       </AnimeEpisodeBlockOut>
                       <AnimeEpisodeTime>{attributes.length} minutes</AnimeEpisodeTime>
-                      <img src={attributes.thumbnail?.original} alt="episode img" />
+                      <img
+                        src={attributes.thumbnail?.original || episodesEmptyJpg}
+                        alt="episode img"
+                      />
                     </AnimeEpisode>
                     <AnimeEpisodeNumber>Episode {attributes.number}</AnimeEpisodeNumber>
                   </>

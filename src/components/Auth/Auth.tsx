@@ -2,9 +2,10 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 
-import closeSvg from '../assets/img/cancel.svg';
-import { loginUser } from '../redux/users';
+import { loginUser } from '../../redux/users';
 import Login from './Login';
+
+import closeSvg from '../../assets/img/cancel.svg';
 
 const AuthBlock = styled.div`
   position: absolute;

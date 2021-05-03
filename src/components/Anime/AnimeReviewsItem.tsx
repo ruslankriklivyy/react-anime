@@ -1,13 +1,13 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../redux';
+import { RootState } from '../../redux';
 
-import { AnimeReviewsData } from '../types/types';
-import { Box } from '../pages/AnimeInfo';
-import { getReviewsAnime } from '../redux/anime';
+import { AnimeReviewsData } from '../../types/types';
+import { Box } from '../../pages/AnimeInfo';
+import { getReviewsAnime } from '../../redux/anime';
 
-import loverSvg from '../assets/img/lover.svg';
+import loverSvg from '../../assets/img/lover.svg';
 
 const AnimeInfoReviews = styled.p`
   display: -webkit-box;
@@ -36,8 +36,7 @@ const AnimeInfoReviewsTop = styled.div`
 
 const AnimeReviewsItem = () => {
   const dispatch = useDispatch();
-  const animeReviews = useSelector((state: RootState) => state.anime.animeReviews);
-  const animeId = useSelector((state: RootState) => state.anime.animeId);
+  const { animeReviews, animeId } = useSelector((state: RootState) => state.anime);
 
   React.useEffect(() => {
     dispatch(getReviewsAnime({ animeId }));

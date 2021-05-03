@@ -1,6 +1,7 @@
 import axios from 'axios';
 import {
   Anime,
+  AnimeEpisodesResponse,
   AnimeOneResponse,
   AnimeReviewsResponse,
   Genres,
@@ -32,14 +33,14 @@ export const animeApi = {
     return instance.get(`anime?sort=-averageRating`).then(({ data }) => data.data);
   },
   fetchFavoritesAnime(
-    animeSeacrhValue: string,
-    animeCurrentGenre: string | null,
+    animeSearchValue: string,
+    currentGenre: string | null,
   ): Promise<Array<Anime>> {
     return instance
       .get(
         `anime?sort=-favoritesCount&page[limit]=12${
-          animeSeacrhValue !== '' ? `&filter[text]=${animeSeacrhValue}` : ''
-        }${animeCurrentGenre !== null ? `&filter[genres]=${animeCurrentGenre}` : ''}`,
+          animeSearchValue !== '' ? `&filter[text]=${animeSearchValue}` : ''
+        }${currentGenre !== null ? `&filter[genres]=${currentGenre}` : ''}`,
       )
       .then(({ data }) => data.data);
   },
@@ -49,7 +50,7 @@ export const animeApi = {
   fetchGenresAnime(animeId: number | null): Promise<Array<Genres>> {
     return instance.get(`anime/${animeId}/genres`).then(({ data }) => data.data);
   },
-  fetchEpisodesAnime(animeId: number | null) {
+  fetchEpisodesAnime(animeId: number | null): Promise<AnimeEpisodesResponse> {
     return instance.get(`anime/${animeId}/episodes`).then(({ data }) => data);
   },
   fetchReviewsAnime(animeId: number | null): Promise<AnimeReviewsResponse> {

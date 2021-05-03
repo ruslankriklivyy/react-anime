@@ -6,13 +6,11 @@ import { RootState } from '../redux';
 import { Container } from '../App';
 import { getUsers } from '../redux/users';
 import { UsersData } from '../types/types';
+import { UsersLoader } from '../components';
 
 import userPng from '../assets/img/empty-user.png';
 import loverSvg from '../assets/img/lover.svg';
 import followersSvg from '../assets/img/followers.svg';
-import { UsersLoader } from '../components';
-
-const UsersWrapper = styled.div``;
 
 const UsersBox = styled.div`
   display: flex;
@@ -69,32 +67,30 @@ const Users = () => {
   }, [dispatch]);
 
   return (
-    <UsersWrapper>
-      <Container>
-        <UsersBox>
-          {isLoading
-            ? users?.data.map((item: UsersData) => (
-                <UsersItem key={item.id}>
-                  <img src={item.attributes.avatar?.large || userPng} alt="avatar" />
-                  <h4>{item.attributes.name}</h4>
-                  <UsersItemBottom>
-                    <UsersItemInfo>
-                      favorites: {item.attributes.favoritesCount}
-                      <img src={loverSvg} alt="lover svg" />
-                    </UsersItemInfo>
-                    <UsersItemInfo>
-                      followers: {item.attributes.followersCount}
-                      <img src={followersSvg} alt="followers svg" />
-                    </UsersItemInfo>
-                  </UsersItemBottom>
-                </UsersItem>
-              ))
-            : Array(20)
-                .fill(0)
-                .map((_, index) => <UsersLoader key={index} />)}
-        </UsersBox>
-      </Container>
-    </UsersWrapper>
+    <Container>
+      <UsersBox>
+        {isLoading
+          ? users?.data.map((item: UsersData) => (
+              <UsersItem key={item.id}>
+                <img src={item.attributes.avatar?.large || userPng} alt="avatar" />
+                <h4>{item.attributes.name}</h4>
+                <UsersItemBottom>
+                  <UsersItemInfo>
+                    favorites: {item.attributes.favoritesCount}
+                    <img src={loverSvg} alt="lover svg" />
+                  </UsersItemInfo>
+                  <UsersItemInfo>
+                    followers: {item.attributes.followersCount}
+                    <img src={followersSvg} alt="followers svg" />
+                  </UsersItemInfo>
+                </UsersItemBottom>
+              </UsersItem>
+            ))
+          : Array(20)
+              .fill(0)
+              .map((_, index) => <UsersLoader key={index} />)}
+      </UsersBox>
+    </Container>
   );
 };
 

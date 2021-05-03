@@ -1,14 +1,15 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
-
-import searchSvg from '../assets/img/search.svg';
-import notificationSvg from '../assets/img/bell.svg';
-import enterSvg from '../assets/img/enter.svg';
-import { RootState } from '../redux';
-import { setAnimeSearchValue } from '../redux/filters';
 import { useCookies } from 'react-cookie';
-import { setIsAuth } from '../redux/users';
+
+import { RootState } from '../../redux';
+import { setAnimeSearchValue } from '../../redux/filters';
+import { setIsAuth } from '../../redux/users';
+
+import searchSvg from '../../assets/img/search.svg';
+import notificationSvg from '../../assets/img/bell.svg';
+import enterSvg from '../../assets/img/enter.svg';
 
 const HeaderAction = styled.button`
   position: relative;
@@ -92,7 +93,9 @@ const HeaderActions: React.FC<IHeaderActions> = ({ toggleVisibleAuth }) => {
   const dispatch = useDispatch();
   const animeSearchValue = useSelector((state: RootState) => state.filters.animeSearchValue);
   const isAuth = useSelector((state: RootState) => state.users.isAuth);
+
   const [visibleInput, setVisibleInput] = React.useState(false);
+
   const [cookies, setCookie, removeCookie] = useCookies(['token']);
 
   const handleInputValue = (value: string) => {

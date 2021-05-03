@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import closeSvg from '../assets/img/close.svg';
+import closeSvg from '../../assets/img/close.svg';
 
 const AnimeTrailerWrapper = styled.div`
   position: relative;

@@ -1,7 +1,7 @@
 import React from 'react';
 import { withFormik, FormikProps, FormikErrors, Form, Field } from 'formik';
-import validateForm from '../utils/validate';
-import { authApi } from '../api/api';
+
+import validateForm from '../../utils/validate';
 
 interface FormValues {
   email: string;
