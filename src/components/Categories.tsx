@@ -50,7 +50,7 @@ const CategoriesWrapper = styled.ul`
   }
 `;
 
-const categoriesArr = ['Home', 'Popular', 'Users'];
+const categoriesArr = ['Home', 'Users'];
 
 interface ICategories {
   toggleVisibleGenres: (e: React.MouseEvent) => void;

@@ -6,7 +6,7 @@ import Slider from 'react-slick';
 import { RootState } from '../redux';
 import { getAnime, getFavoritesAnime, setAnimeId } from '../redux/anime';
 import { Container } from '../App';
-import { AnimeItem } from '.';
+import { AnimeItem, AnimeItemLoader } from '.';
 
 const AnimeWrapper = styled.section`
   position: relative;
@@ -66,6 +66,9 @@ const AnimeAllBox = styled.div`
   align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
+  svg {
+    margin-bottom: 30px;
+  }
   a {
     margin-bottom: 30px;
   }
@@ -74,6 +77,7 @@ const AnimeAllBox = styled.div`
 const Anime = () => {
   const dispatch = useDispatch();
   const animeFavorites = useSelector((state: RootState) => state.anime.animeFavoritesItems);
+  const isLoading = useSelector((state: RootState) => state.anime.isLoading);
   const anime = useSelector((state: RootState) => state.anime.animeItems);
   const animeSeacrhValue = useSelector((state: RootState) => state.filters.animeSearchValue);
   const animeCurrentGenre = useSelector((state: RootState) => state.filters.currentGenre);
@@ -130,16 +134,24 @@ const Anime = () => {
         <TitleMain>Top Rating</TitleMain>
         <AnimeBox>
           <Slider {...settings}>
-            {anime?.map((item) => (
-              <AnimeItem key={item.id} item={item} selectItem={onSelectAnime} />
-            ))}
+            {isLoading
+              ? anime?.map((item) => (
+                  <AnimeItem key={item.id} item={item} selectItem={onSelectAnime} />
+                ))
+              : Array(12)
+                  .fill(0)
+                  .map((_, index) => <AnimeItemLoader key={index} />)}
           </Slider>
         </AnimeBox>
         <TitleMain>{animeCurrentGenre ? animeCurrentGenre : 'All Anime'}</TitleMain>
         <AnimeAllBox>
-          {animeFavorites?.map((item) => (
-            <AnimeItem key={item.id} item={item} selectItem={onSelectAnime} />
-          ))}
+          {isLoading
+            ? animeFavorites?.map((item) => (
+                <AnimeItem key={item.id} item={item} selectItem={onSelectAnime} />
+              ))
+            : Array(12)
+                .fill(0)
+                .map((_, index) => <AnimeItemLoader key={index} />)}
         </AnimeAllBox>
       </Container>
     </AnimeWrapper>

@@ -1,22 +1,24 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
+import { useCookies } from 'react-cookie';
 
-import {
-  getEpisodesAnime,
-  getGenresAnime,
-  getOneAnime,
-  getReviewsAnime,
-  setAnimeId,
-} from '../redux/anime';
+import { getGenresAnime, getOneAnime, setAnimeId } from '../redux/anime';
 import { Container } from '../App';
 import { RootState } from '../redux';
 
 import starSvg from '../assets/img/star.svg';
-import { AnimeReviewsAttributes, AnimeReviewsData, AttributesGenres, Genres } from '../types/types';
-import { AnimeEpisodes, AnimeReviewsItem, AnimeTrailer, Button } from '../components';
-
+import { Genres } from '../types/types';
+import {
+  AnimeEpisodes,
+  AnimeInfoLoader,
+  AnimeReviewsItem,
+  AnimeTrailer,
+  Button,
+} from '../components';
 import scrollTop from '../utils/scrollTop';
+
+import plusSvg from '../assets/img/plus.svg';
 
 const AnimeInfoWrapper = styled.div`
   position: relative;
@@ -130,6 +132,11 @@ const AnimeInfoGenre = styled.button`
   letter-spacing: 1px;
 `;
 
+const AnimeInfoBottom = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
 const AnimeInfoGenres = styled.div`
   margin-bottom: 35px;
 `;
@@ -146,6 +153,27 @@ export const Box = styled.div`
   ${(props: AnimeBox) => (props.slider || props.reviews ? 'border-top-left-radius: 0;' : '')};
 `;
 
+const AnimeButtonPlus = styled.button`
+  background-color: transparent;
+  padding: 11px 15px;
+  border: 2px solid #ffb400;
+  margin-left: 20px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  &:hover {
+    background-color: #ffb400;
+  }
+  &:active {
+    transform: translateY(7px);
+  }
+  img {
+    display: block;
+    width: 21px;
+    height: 21px;
+  }
+`;
+
 interface AnimeBox {
   slider: boolean;
   reviews: boolean;
@@ -156,10 +184,12 @@ const AnimeInfo = () => {
   const animeId = useSelector((state: RootState) => state.anime.animeId);
   const animeItem = useSelector((state: RootState) => state.anime.chosenAnime);
   const genresAnime = useSelector((state: RootState) => state.anime.genresAnime);
+  const isLoadingInfo = useSelector((state: RootState) => state.anime.isLoadingInfo);
   const { posterImage, titles, startDate, synopsis, averageRating, youtubeVideoId } =
     animeItem.hasOwnProperty('data') && animeItem.data.attributes;
 
   const [visibleTrailer, setVisibleTrailer] = React.useState(false);
+  const [cookies, setCookie] = useCookies(['animeId']);
 
   const closeTrailer = React.useCallback(() => {
     setVisibleTrailer(false);
@@ -183,15 +213,16 @@ const AnimeInfo = () => {
   }, [dispatch, animeId]);
 
   React.useEffect(() => {
-    const animeIdStorage = JSON.parse(localStorage.getItem('animeId') || 'number');
-    if (!animeId) {
-      dispatch(setAnimeId(Number(animeIdStorage)));
+    if (animeId !== null) {
+      setCookie('animeId', animeId, { path: '/' });
     }
-  }, [dispatch, animeId]);
+  }, [dispatch, animeId, setCookie]);
 
   React.useEffect(() => {
-    localStorage.setItem('animeId', JSON.stringify(animeId));
-  }, [animeId]);
+    if (animeId === null) {
+      dispatch(setAnimeId(cookies.animeId));
+    }
+  }, [animeId, dispatch, cookies.animeId]);
 
   return (
     <AnimeInfoWrapper>
@@ -203,7 +234,7 @@ const AnimeInfo = () => {
         />
         <AnimeInfoBox>
           <Box>
-            {animeItem.hasOwnProperty('data') && (
+            {isLoadingInfo ? (
               <>
                 <div>
                   <AnimeImage src={posterImage.medium} />
@@ -223,9 +254,16 @@ const AnimeInfo = () => {
                       <AnimeInfoGenre key={genre.id}>{genre.attributes.name}</AnimeInfoGenre>
                     ))}
                   </AnimeInfoGenres>
-                  <Button onClick={() => openTrailer()}>Watch Trailer</Button>
+                  <AnimeInfoBottom>
+                    <Button onClick={() => openTrailer()}>Watch Trailer</Button>
+                    <AnimeButtonPlus>
+                      <img src={plusSvg} alt="plus svg" />
+                    </AnimeButtonPlus>
+                  </AnimeInfoBottom>
                 </AnimeInfoMain>
               </>
+            ) : (
+              <AnimeInfoLoader />
             )}
           </Box>
         </AnimeInfoBox>

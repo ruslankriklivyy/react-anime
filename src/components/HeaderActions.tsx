@@ -29,13 +29,7 @@ const HeaderAction = styled.button`
 `;
 
 const HeaderSearchInput = styled.input`
-  position: absolute;
-  right: 90px;
-  z-index: 200;
-  width: 300px;
-  height: 40px;
   border: 2px solid #fff;
-  padding: 10px;
   border-radius: 13px;
   background: transparent;
   font-size: 17px;
@@ -43,7 +37,10 @@ const HeaderSearchInput = styled.input`
   letter-spacing: 1px;
   outline: none;
   transition: all 0.3s ease;
-  ${(props: IHeaderSearchInput) => (props.show ? 'top: 0' : 'top: -100%')};
+  ${(props: IHeaderSearchInput) => (props.show ? 'visibility: visible' : 'visibility: hidden;')};
+  ${(props: IHeaderSearchInput) => (props.show ? 'width: 300px' : 'width: 0;')};
+  ${(props: IHeaderSearchInput) => (props.show ? 'height: 40px' : 'height: 0;')};
+  ${(props: IHeaderSearchInput) => (props.show ? 'padding: 10px' : 'padding: 0;')};
   &::placeholder {
     color: #fff;
     letter-spacing: 1px;

@@ -6,6 +6,7 @@ const initialState = {
   users: null as UsersRespones | null,
   token: null as Token | null,
   isAuth: false as boolean,
+  isLoading: false as boolean,
   userInfo: {
     email: '' as string,
     password: '' as string,
@@ -18,8 +19,10 @@ interface ILogin {
 }
 
 export const getUsers = createAsyncThunk('users/getUsers', async (props, thunkApi) => {
+  thunkApi.dispatch(setIsLoading(false));
   const data = await usersApi.fetchUsers();
   thunkApi.dispatch(setUsers(data));
+  thunkApi.dispatch(setIsLoading(true));
 });
 
 export const loginUser = createAsyncThunk('users/loginUser', async (props: ILogin, thunkApi) => {
@@ -51,8 +54,11 @@ const users = createSlice({
     setToken: (state, action: PayloadAction<Token>) => {
       state.token = action.payload;
     },
+    setIsLoading: (state, action: PayloadAction<boolean>) => {
+      state.isLoading = action.payload;
+    },
   },
 });
 
 export default users.reducer;
-export const { setUsers, setIsAuth, setUserInfo, setToken } = users.actions;
+export const { setUsers, setIsAuth, setUserInfo, setToken, setIsLoading } = users.actions;

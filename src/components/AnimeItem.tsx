@@ -71,6 +71,7 @@ const AnimeRating = styled.div`
     display: block;
     width: 15px;
     height: 15px;
+    margin-bottom: 3px;
     margin-right: 7px;
   }
   span {

@@ -16,6 +16,8 @@ const initialState = {
   episodesAnime: {} as AnimeEpisodesResponse,
   animeReviews: null as AnimeReviewsResponse | null,
   animeId: null as number | null,
+  isLoading: false as boolean,
+  isLoadingInfo: false as boolean,
 };
 
 interface IGetFavoritesAnime {
@@ -27,26 +29,32 @@ interface IAnimeId {
 }
 
 export const getAnime = createAsyncThunk('anime/getAnime', async (props, thunkAPI) => {
+  thunkAPI.dispatch(setIsLoading(false));
   const data = await animeApi.fetchAnime();
   thunkAPI.dispatch(setAnimeItems(data));
+  thunkAPI.dispatch(setIsLoading(true));
 });
 
 export const getFavoritesAnime = createAsyncThunk(
   'anime/getFavoritesAnime',
-  async (props: IGetFavoritesAnime, thunkApi) => {
+  async (props: IGetFavoritesAnime, thunkAPI) => {
+    thunkAPI.dispatch(setIsLoading(false));
     const data = await animeApi.fetchFavoritesAnime(
       props.animeSeacrhValue,
       props.animeCurrentGenre,
     );
-    thunkApi.dispatch(setFavoritesAnimeItems(data));
+    thunkAPI.dispatch(setFavoritesAnimeItems(data));
+    thunkAPI.dispatch(setIsLoading(true));
   },
 );
 
 export const getOneAnime = createAsyncThunk(
   'anime/getOneAnime',
   async (props: IAnimeId, thunkAPI) => {
+    thunkAPI.dispatch(setIsLoadingInfo(false));
     const data = await animeApi.fetchOneAnime(props.animeId);
     thunkAPI.dispatch(setChosenAnime(data));
+    thunkAPI.dispatch(setIsLoadingInfo(true));
   },
 );
 
@@ -99,6 +107,12 @@ const anime = createSlice({
     setAnimeId: (state, action: PayloadAction<number>) => {
       state.animeId = action.payload;
     },
+    setIsLoading: (state, action: PayloadAction<boolean>) => {
+      state.isLoading = action.payload;
+    },
+    setIsLoadingInfo: (state, action: PayloadAction<boolean>) => {
+      state.isLoadingInfo = action.payload;
+    },
   },
 });
 
@@ -111,4 +125,6 @@ export const {
   setEpisodesAnime,
   setFavoritesAnimeItems,
   setReviewsAnime,
+  setIsLoading,
+  setIsLoadingInfo,
 } = anime.actions;

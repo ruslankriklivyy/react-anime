@@ -9,3 +9,6 @@ export { default as AnimeTrailer } from './AnimeTrailer';
 export { default as AnimeReviewsItem } from './AnimeReviewsItem';
 export { default as Auth } from './Auth';
 export { default as Login } from './Login';
+export { default as AnimeItemLoader } from './AnimeItemLoader';
+export { default as AnimeInfoLoader } from './AnimeInfoLoader';
+export { default as UsersLoader } from './UsersLoader';

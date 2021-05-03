@@ -105,9 +105,10 @@ interface IAuth {
   visibleAuth: boolean;
   toggleVisibleAuth: () => void;
   blockOutRef: React.RefObject<HTMLDivElement>;
+  onCloseAuth: () => void;
 }
 
-const Auth: React.FC<IAuth> = ({ visibleAuth, blockOutRef, toggleVisibleAuth }) => {
+const Auth: React.FC<IAuth> = ({ visibleAuth, blockOutRef, toggleVisibleAuth, onCloseAuth }) => {
   const dispatch = useDispatch();
 
   const onSendUser = (email: string, password: string) => {
@@ -117,10 +118,10 @@ const Auth: React.FC<IAuth> = ({ visibleAuth, blockOutRef, toggleVisibleAuth }) 
   const escapeListener = React.useCallback(
     (e) => {
       if (e.key === 'Escape') {
-        toggleVisibleAuth();
+        onCloseAuth();
       }
     },
-    [toggleVisibleAuth],
+    [onCloseAuth],
   );
   const clickListener = React.useCallback(
     (e) => {
@@ -129,10 +130,10 @@ const Auth: React.FC<IAuth> = ({ visibleAuth, blockOutRef, toggleVisibleAuth }) 
         blockOutRef.current &&
         e.target.className === blockOutRef.current.className
       ) {
-        toggleVisibleAuth();
+        onCloseAuth();
       }
     },
-    [blockOutRef, toggleVisibleAuth],
+    [blockOutRef, onCloseAuth],
   );
   React.useEffect(() => {
     document.addEventListener('click', clickListener);

@@ -135,6 +135,10 @@ const Header = () => {
     setVisibleAuth(!visibleAuth);
   };
 
+  const onCloseAuth = () => {
+    setVisibleAuth(false);
+  };
+
   const selectGenre = (genre: string) => {
     dispatch(setCurrentGenre(genre));
   };
@@ -192,6 +196,7 @@ const Header = () => {
           blockOutRef={blockOutRef}
           visibleAuth={visibleAuth}
           toggleVisibleAuth={toggleVisibleAuth}
+          onCloseAuth={onCloseAuth}
         />
       </Container>
     </HeaderWrapper>

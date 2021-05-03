@@ -10,6 +10,7 @@ import { UsersData } from '../types/types';
 import userPng from '../assets/img/empty-user.png';
 import loverSvg from '../assets/img/lover.svg';
 import followersSvg from '../assets/img/followers.svg';
+import { UsersLoader } from '../components';
 
 const UsersWrapper = styled.div``;
 
@@ -61,7 +62,7 @@ const UsersItemInfo = styled.div`
 
 const Users = () => {
   const dispatch = useDispatch();
-  const users = useSelector((state: RootState) => state.users.users);
+  const { users, isLoading } = useSelector((state: RootState) => state.users);
 
   React.useEffect(() => {
     dispatch(getUsers());
@@ -71,21 +72,26 @@ const Users = () => {
     <UsersWrapper>
       <Container>
         <UsersBox>
-          {users?.data.map((item: UsersData) => (
-            <UsersItem key={item.id}>
-              <img src={item.attributes.avatar?.large || userPng} alt="avatar" />
-              <h4>{item.attributes.name}</h4>
-              <UsersItemBottom>
-                <UsersItemInfo>
-                  favorites: {item.attributes.favoritesCount} <img src={loverSvg} alt="lover svg" />
-                </UsersItemInfo>
-                <UsersItemInfo>
-                  followers: {item.attributes.followersCount}{' '}
-                  <img src={followersSvg} alt="followers svg" />
-                </UsersItemInfo>
-              </UsersItemBottom>
-            </UsersItem>
-          ))}
+          {isLoading
+            ? users?.data.map((item: UsersData) => (
+                <UsersItem key={item.id}>
+                  <img src={item.attributes.avatar?.large || userPng} alt="avatar" />
+                  <h4>{item.attributes.name}</h4>
+                  <UsersItemBottom>
+                    <UsersItemInfo>
+                      favorites: {item.attributes.favoritesCount}
+                      <img src={loverSvg} alt="lover svg" />
+                    </UsersItemInfo>
+                    <UsersItemInfo>
+                      followers: {item.attributes.followersCount}
+                      <img src={followersSvg} alt="followers svg" />
+                    </UsersItemInfo>
+                  </UsersItemBottom>
+                </UsersItem>
+              ))
+            : Array(20)
+                .fill(0)
+                .map((_, index) => <UsersLoader key={index} />)}
         </UsersBox>
       </Container>
     </UsersWrapper>
