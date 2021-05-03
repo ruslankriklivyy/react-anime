@@ -56,6 +56,33 @@ const HeaderSearchInput = styled.input`
   }
 `;
 
+const UserInfo = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+const UserEmail = styled.div`
+  letter-spacing: 1px;
+`;
+
+const UserLogout = styled.button`
+  background: transparent;
+  color: #fff;
+  cursor: pointer;
+  border: 2px solid #f1b32e;
+  padding: 4px 10px;
+  letter-spacing: 1px;
+  border-radius: 6px;
+  margin-left: 10px;
+  transition: all 0.3s ease;
+  &:hover {
+    background-color: #f1b32e;
+  }
+  &:active {
+    transform: translateY(3px);
+  }
+`;
+
 interface IHeaderSearchInput {
   show: boolean;
 }
@@ -100,10 +127,10 @@ const HeaderActions: React.FC<IHeaderActions> = ({ toggleVisibleAuth }) => {
           <img src={enterSvg} alt="enter svg" />
         </HeaderAction>
       ) : (
-        <>
-          <div>{cookies?.userInfo?.email}</div>
-          <div onClick={() => logout()}>Logout</div>
-        </>
+        <UserInfo>
+          <UserEmail>{cookies?.userInfo?.email}</UserEmail>
+          <UserLogout onClick={() => logout()}>Logout</UserLogout>
+        </UserInfo>
       )}
     </>
   );
