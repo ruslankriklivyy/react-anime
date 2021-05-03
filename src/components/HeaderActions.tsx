@@ -7,6 +7,8 @@ import notificationSvg from '../assets/img/bell.svg';
 import enterSvg from '../assets/img/enter.svg';
 import { RootState } from '../redux';
 import { setAnimeSearchValue } from '../redux/filters';
+import { useCookies } from 'react-cookie';
+import { setIsAuth } from '../redux/users';
 
 const HeaderAction = styled.button`
   position: relative;
@@ -58,13 +60,25 @@ interface IHeaderSearchInput {
   show: boolean;
 }
 
-const HeaderActions = () => {
+interface IHeaderActions {
+  toggleVisibleAuth: () => void;
+}
+
+const HeaderActions: React.FC<IHeaderActions> = ({ toggleVisibleAuth }) => {
   const dispatch = useDispatch();
   const animeSearchValue = useSelector((state: RootState) => state.filters.animeSearchValue);
+  const isAuth = useSelector((state: RootState) => state.users.isAuth);
   const [visibleInput, setVisibleInput] = React.useState(false);
+  const [cookies, setCookie, removeCookie] = useCookies(['token']);
 
   const handleInputValue = (value: string) => {
     dispatch(setAnimeSearchValue(value));
+  };
+
+  const logout = () => {
+    removeCookie('userInfo');
+    removeCookie('token');
+    dispatch(setIsAuth(false));
   };
 
   return (
@@ -81,9 +95,16 @@ const HeaderActions = () => {
       <HeaderAction>
         <img src={notificationSvg} alt="notification svg" />
       </HeaderAction>
-      <HeaderAction>
-        <img src={enterSvg} alt="enter svg" />
-      </HeaderAction>
+      {!isAuth ? (
+        <HeaderAction onClick={() => toggleVisibleAuth()}>
+          <img src={enterSvg} alt="enter svg" />
+        </HeaderAction>
+      ) : (
+        <>
+          <div>{cookies?.userInfo?.email}</div>
+          <div onClick={() => logout()}>Logout</div>
+        </>
+      )}
     </>
   );
 };

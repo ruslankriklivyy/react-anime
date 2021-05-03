@@ -118,3 +118,13 @@ export type AnimeReviewsData = {
 export type AnimeReviewsResponse = {
   data: Array<AnimeReviewsData>;
 };
+
+export type Token = {
+  access_token: string;
+  created_at: number;
+  expires_in: number;
+  refresh_token: string;
+  scope: string;
+  token_type: string;
+  error?: string;
+};

@@ -2,15 +2,21 @@ import axios from 'axios';
 import {
   Anime,
   AnimeOneResponse,
-  AnimeResponse,
   AnimeReviewsResponse,
   Genres,
   GenresResponse,
+  Token,
   UsersRespones,
 } from '../types/types';
 
+const token = JSON.parse(localStorage.getItem('token') || 'null');
+
 const instance = axios.create({
   baseURL: 'https://kitsu.io/api/edge/',
+  headers: {
+    Authorization: `Bearer ${token?.access_token}`,
+    'Content-Type': 'application/vnd.api+json',
+  },
 });
 
 const $auth = axios.create({
@@ -58,15 +64,14 @@ export const usersApi = {
 };
 
 export const authApi = {
-  login() {
+  login(email: string, password: string): Promise<Token> {
     return $auth
       .post('oauth/token', {
         grant_type: 'password',
-        username: 'ruslankriklivyy@gmail.com',
-        password: 'ZZ2002fagotsgg2002',
+        username: email,
+        password,
       })
       .then(({ data }) => {
-        console.log(data);
         return data;
       });
   },

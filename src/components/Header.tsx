@@ -4,12 +4,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 import { Container } from '../App';
-import { Categories, HeaderActions } from '.';
+import { Auth, Categories, HeaderActions } from '.';
 import { getGenres, setCurrentGenre } from '../redux/filters';
 import { RootState } from '../redux';
 import { Genres } from '../types/types';
 
 import closeSvg from '../assets/img/cancel.svg';
+import { setIsAuth } from '../redux/users';
+import { useCookies } from 'react-cookie';
 
 const HeaderWrapper = styled.header`
   padding-top: 25px;
@@ -99,6 +101,17 @@ const HeaderBottomClose = styled.button`
   }
 `;
 
+const BlockOut = styled.div`
+  position: fixed;
+  ${(props: IHeaderBottom) => (props.show ? 'visibility: visible' : 'visibility: hidden')};
+  top: 0;
+  transition: all 0.2s ease;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  z-index: 700;
+`;
+
 interface IHeaderBottom {
   show: boolean;
 }
@@ -106,11 +119,20 @@ interface IHeaderBottom {
 const Header = () => {
   const dispatch = useDispatch();
   const animeGenres = useSelector((state: RootState) => state.filters.animeGenres);
+  const userToken = useSelector((state: RootState) => state.users.token);
+  const userInfo = useSelector((state: RootState) => state.users.userInfo);
   const [visibleGenres, setVisibleGenres] = React.useState(false);
+  const [visibleAuth, setVisibleAuth] = React.useState(false);
+  const blockOutRef = React.useRef<HTMLDivElement>(null);
+  const [cookies, setCookie] = useCookies(['token']);
 
   const toggleVisibleGenres = (e?: React.MouseEvent) => {
     e?.preventDefault();
     setVisibleGenres(!visibleGenres);
+  };
+
+  const toggleVisibleAuth = () => {
+    setVisibleAuth(!visibleAuth);
   };
 
   const selectGenre = (genre: string) => {
@@ -118,11 +140,32 @@ const Header = () => {
   };
 
   React.useEffect(() => {
+    if (userToken !== null) {
+      setCookie('token', userToken, { path: '/' });
+    }
+  }, [userToken, setCookie]);
+
+  React.useEffect(() => {
+    if (userInfo.email !== '') {
+      setCookie('userInfo', userInfo, { path: '/' });
+    }
+  }, [userInfo, setCookie]);
+
+  React.useEffect(() => {
+    if (cookies.token) {
+      dispatch(setIsAuth(true));
+    } else {
+      dispatch(setIsAuth(false));
+    }
+  }, [dispatch, cookies]);
+
+  React.useEffect(() => {
     dispatch(getGenres());
   }, [dispatch]);
 
   return (
     <HeaderWrapper>
+      <BlockOut ref={blockOutRef} show={visibleAuth}></BlockOut>
       <Container>
         <HeaderTop>
           <Title>
@@ -130,7 +173,7 @@ const Header = () => {
           </Title>
           <Categories toggleVisibleGenres={toggleVisibleGenres} />
           <HeaderRight>
-            <HeaderActions />
+            <HeaderActions toggleVisibleAuth={toggleVisibleAuth} />
           </HeaderRight>
         </HeaderTop>
         <HeaderBottom show={visibleGenres}>
@@ -145,6 +188,11 @@ const Header = () => {
             </HeaderGenre>
           ))}
         </HeaderBottom>
+        <Auth
+          blockOutRef={blockOutRef}
+          visibleAuth={visibleAuth}
+          toggleVisibleAuth={toggleVisibleAuth}
+        />
       </Container>
     </HeaderWrapper>
   );

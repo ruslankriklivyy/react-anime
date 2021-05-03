@@ -4,6 +4,7 @@ import App from './App';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { store } from './redux/store';
+import { CookiesProvider } from 'react-cookie';
 import styled, { createGlobalStyle } from 'styled-components';
 
 const Global = createGlobalStyle`
@@ -54,8 +55,10 @@ ReactDOM.render(
   <React.StrictMode>
     <Router>
       <Provider store={store}>
-        <Global />
-        <App />
+        <CookiesProvider>
+          <Global />
+          <App />
+        </CookiesProvider>
       </Provider>
     </Router>
   </React.StrictMode>,

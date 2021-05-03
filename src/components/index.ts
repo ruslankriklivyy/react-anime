@@ -7,3 +7,5 @@ export { default as AnimeItem } from './AnimeItem';
 export { default as AnimeEpisodes } from './AnimeEpisodes';
 export { default as AnimeTrailer } from './AnimeTrailer';
 export { default as AnimeReviewsItem } from './AnimeReviewsItem';
+export { default as Auth } from './Auth';
+export { default as Login } from './Login';

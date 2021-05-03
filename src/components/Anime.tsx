@@ -7,8 +7,6 @@ import { RootState } from '../redux';
 import { getAnime, getFavoritesAnime, setAnimeId } from '../redux/anime';
 import { Container } from '../App';
 import { AnimeItem } from '.';
-import { setCurrentGenre } from '../redux/filters';
-import { authApi } from '../api/api';
 
 const AnimeWrapper = styled.section`
   position: relative;
@@ -32,10 +30,6 @@ const AnimeWrapper = styled.section`
   .slick-prev {
     right: 100px !important;
     left: auto;
-  }
-  .slick-slide {
-    /* display: inline-flex;
-    justify-content: flex-start; */
   }
   .slick-slide > div {
     width: 300px !important;
@@ -125,10 +119,6 @@ const Anime = () => {
   React.useEffect(() => {
     dispatch(getAnime());
   }, [dispatch]);
-
-  React.useEffect(() => {
-    authApi.login();
-  }, []);
 
   React.useEffect(() => {
     dispatch(getFavoritesAnime({ animeSeacrhValue, animeCurrentGenre }));
