@@ -135,7 +135,11 @@ const Anime = () => {
           <Slider {...settings}>
             {isLoading
               ? animeItems?.map((item) => (
-                  <AnimeItem key={item.id} item={item} selectItem={onSelectAnime} />
+                  <AnimeItem
+                    key={item.id}
+                    item={item.attributes}
+                    selectItem={() => onSelectAnime(Number(item.id))}
+                  />
                 ))
               : Array(12)
                   .fill(0)
@@ -146,7 +150,11 @@ const Anime = () => {
         <AnimeAllBox>
           {isLoading
             ? animeFavoritesItems?.map((item) => (
-                <AnimeItem key={item.id} item={item} selectItem={onSelectAnime} />
+                <AnimeItem
+                  key={item.id}
+                  item={item.attributes}
+                  selectItem={() => onSelectAnime(Number(item.id))}
+                />
               ))
             : Array(12)
                 .fill(0)

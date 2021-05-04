@@ -6,6 +6,7 @@ import { useCookies } from 'react-cookie';
 import { getGenresAnime, getOneAnime, setAnimeId } from '../redux/anime';
 import { Container } from '../App';
 import { RootState } from '../redux';
+import { addToList } from '../redux/list';
 import { AttributesAnime, Genres } from '../types/types';
 import {
   AnimeEpisodes,
@@ -19,7 +20,6 @@ import scrollTop from '../utils/scrollTop';
 import plusSvg from '../assets/img/plus.svg';
 import starSvg from '../assets/img/star.svg';
 import removeSvg from '../assets/img/cancel.svg';
-import { addToList } from '../redux/list';
 
 const AnimeInfoWrapper = styled.div`
   position: relative;
@@ -257,7 +257,6 @@ const typesList = ['Plan to watch', 'Checked', 'Liked', "Didn't like it."];
 
 const AnimeInfo = () => {
   const dispatch = useDispatch();
-  const listItems = useSelector((state: RootState) => state.list.listItems);
   const { chosenAnime, animeId, genresAnime, isLoadingInfo } = useSelector(
     (state: RootState) => state.anime,
   );
@@ -269,8 +268,6 @@ const AnimeInfo = () => {
   const blockOutRef = React.useRef<HTMLDivElement>(null);
 
   const [cookies, setCookie] = useCookies(['animeId']);
-
-  console.log(listItems);
 
   const closeAddBlock = React.useCallback(() => {
     setVisibleAddBlock(false);
@@ -288,7 +285,7 @@ const AnimeInfo = () => {
   const addAnimeToList = (type: string, obj: AttributesAnime) => {
     const newObj = {
       id: chosenAnime.data.id,
-      names: obj.titles,
+      titles: obj.titles,
       startDate: obj.startDate,
       synopsis: obj.synopsis,
       averageRating: obj.averageRating,
@@ -302,6 +299,8 @@ const AnimeInfo = () => {
         item: newObj,
       }),
     );
+
+    closeAddBlock();
   };
 
   React.useEffect(() => {

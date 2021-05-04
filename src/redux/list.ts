@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 const initialState = {
   listItems: [] as any,
+  currentType: 'Plan to watch' as string,
 };
 
 const list = createSlice({
@@ -23,8 +24,15 @@ const list = createSlice({
         state.listItems.push(action.payload.item);
       }
     },
+    setTypeList: (state, action: PayloadAction<string>) => {
+      state.currentType = action.payload;
+    },
+    removeItemFromList: (state, action) => {
+      const newItems = state.listItems.filter((i: any) => i.id !== action.payload);
+      state.listItems = newItems;
+    },
   },
 });
 
 export default list.reducer;
-export const { addToList } = list.actions;
+export const { addToList, setTypeList, removeItemFromList } = list.actions;

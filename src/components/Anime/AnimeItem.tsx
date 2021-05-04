@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 
 import starSvg from '../../assets/img/star.svg';
-import { Anime } from '../../types/types';
+import { Anime, AttributesAnime } from '../../types/types';
 
 const AnimeImage = styled.img`
   display: block;
@@ -39,6 +39,7 @@ const AnimeBlockout = styled.div`
 
 const AnimeItemWrapper = styled.div`
   position: relative;
+  z-index: 50;
   color: #fff;
   width: 300px !important;
   height: 360px !important;
@@ -79,22 +80,22 @@ const AnimeRating = styled.div`
 `;
 
 interface AnimeItemProps {
-  item: Anime;
-  selectItem: (id: number) => void;
+  item: AttributesAnime;
+  selectItem: () => void;
 }
 
 const AnimeItem: React.FC<AnimeItemProps> = ({ item, selectItem }) => {
   return (
     <Link to="info">
-      <AnimeItemWrapper key={item.id} onClick={() => selectItem(Number(item.id))}>
+      <AnimeItemWrapper onClick={() => selectItem()}>
         <AnimeBlockout>
-          <h2>{item.attributes.titles.en || item.attributes.titles.en_jp}</h2>
+          <h2>{item.titles.en || item.titles.en_jp}</h2>
         </AnimeBlockout>
         <AnimeRating>
           <img src={starSvg} alt="star svg" />
-          <span>{item.attributes.averageRating}</span>
+          <span>{item.averageRating}</span>
         </AnimeRating>
-        <AnimeImage src={item.attributes.posterImage?.medium} />
+        <AnimeImage src={item.posterImage?.medium} />
       </AnimeItemWrapper>
     </Link>
   );
