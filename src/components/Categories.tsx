@@ -11,9 +11,9 @@ const CategoriesWrapper = styled.ul`
       position: relative;
       font-weight: 400;
       letter-spacing: 1px;
-      font-size: 21px;
+      font-size: 19px;
       color: #fff;
-      margin: 0 20px;
+      margin: 0 15px;
       padding-bottom: 4px;
       transition: all 0.2s ease;
       &.active {
@@ -50,7 +50,7 @@ const CategoriesWrapper = styled.ul`
   }
 `;
 
-const categoriesArr = ['Home', 'Users'];
+const categoriesArr = ['Home', 'Anime List', 'Users'];
 
 interface ICategories {
   toggleVisibleGenres: (e: React.MouseEvent) => void;
@@ -61,7 +61,7 @@ const Categories: React.FC<ICategories> = ({ toggleVisibleGenres }) => {
     <CategoriesWrapper>
       {categoriesArr.map((name, index) => (
         <li key={index}>
-          <Link to={`/${name.toLowerCase()}`}>{name}</Link>
+          <Link to={`/${name.toLowerCase().split(' ').join('')}`}>{name}</Link>
         </li>
       ))}
       <li>

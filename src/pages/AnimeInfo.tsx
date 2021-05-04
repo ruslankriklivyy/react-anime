@@ -6,7 +6,7 @@ import { useCookies } from 'react-cookie';
 import { getGenresAnime, getOneAnime, setAnimeId } from '../redux/anime';
 import { Container } from '../App';
 import { RootState } from '../redux';
-import { Genres } from '../types/types';
+import { AttributesAnime, Genres } from '../types/types';
 import {
   AnimeEpisodes,
   AnimeInfoLoader,
@@ -18,6 +18,8 @@ import scrollTop from '../utils/scrollTop';
 
 import plusSvg from '../assets/img/plus.svg';
 import starSvg from '../assets/img/star.svg';
+import removeSvg from '../assets/img/cancel.svg';
+import { addToList } from '../redux/list';
 
 const AnimeInfoWrapper = styled.div`
   position: relative;
@@ -107,6 +109,7 @@ const AnimeRating = styled.div`
   position: absolute;
   top: 55px;
   right: 55px;
+  z-index: 300;
   img {
     display: block;
     width: 22px;
@@ -155,7 +158,7 @@ export const Box = styled.div`
 
 const AnimeButtonPlus = styled.button`
   background-color: transparent;
-  padding: 11px 15px;
+  padding: 12px 15px;
   border: 2px solid #ffb400;
   margin-left: 20px;
   border-radius: 10px;
@@ -174,13 +177,87 @@ const AnimeButtonPlus = styled.button`
   }
 `;
 
+const AnimeAddedBox = styled.div`
+  ${(props: IBlockOutInfo) => (props.show ? 'visibility: visible' : 'visibility: hidden')};
+  ${(props: IBlockOutInfo) => (props.show ? 'opacity: 1' : 'opacity: 0')};
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 400px;
+  z-index: 900;
+  min-height: 400px;
+  transform: translate(-50%, -50%);
+  background-color: #212121;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  padding: 20px;
+  border-radius: 10px;
+  transition: all 0.2s ease;
+  span {
+    display: block;
+    margin-left: auto;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    &:active {
+      transform: translateY(5px);
+    }
+    img {
+      width: 17px;
+      height: 17px;
+    }
+  }
+  h4 {
+    font-size: 42px;
+    margin-bottom: 10px;
+  }
+  button {
+    margin-top: 15px;
+    width: 100%;
+    height: 50px;
+    cursor: pointer;
+    background: transparent;
+    color: #fff;
+    font-weight: 500;
+    letter-spacing: 1px;
+    font-size: 22px;
+    border: 2px solid #ffb400;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+    &:active {
+      transform: translateY(5px);
+    }
+    &:hover {
+      background-color: #ffb400;
+    }
+  }
+`;
+
+const BlockOutInfo = styled.div`
+  position: fixed;
+  ${(props: IBlockOutInfo) => (props.show ? 'visibility: visible' : 'visibility: hidden')};
+  top: 0;
+  transition: all 0.2s ease;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  z-index: 700;
+`;
+
+interface IBlockOutInfo {
+  show: boolean;
+}
+
 interface AnimeBox {
   slider: boolean;
   reviews: boolean;
 }
 
+const typesList = ['Plan to watch', 'Checked', 'Liked', "Didn't like it."];
+
 const AnimeInfo = () => {
   const dispatch = useDispatch();
+  const listItems = useSelector((state: RootState) => state.list.listItems);
   const { chosenAnime, animeId, genresAnime, isLoadingInfo } = useSelector(
     (state: RootState) => state.anime,
   );
@@ -188,8 +265,16 @@ const AnimeInfo = () => {
     chosenAnime.hasOwnProperty('data') && chosenAnime.data.attributes;
 
   const [visibleTrailer, setVisibleTrailer] = React.useState(false);
+  const [visibleAddBlock, setVisibleAddBlock] = React.useState(false);
+  const blockOutRef = React.useRef<HTMLDivElement>(null);
 
   const [cookies, setCookie] = useCookies(['animeId']);
+
+  console.log(listItems);
+
+  const closeAddBlock = React.useCallback(() => {
+    setVisibleAddBlock(false);
+  }, []);
 
   const closeTrailer = React.useCallback(() => {
     setVisibleTrailer(false);
@@ -198,6 +283,25 @@ const AnimeInfo = () => {
   const openTrailer = () => {
     setVisibleTrailer(true);
     scrollTop();
+  };
+
+  const addAnimeToList = (type: string, obj: AttributesAnime) => {
+    const newObj = {
+      id: chosenAnime.data.id,
+      names: obj.titles,
+      startDate: obj.startDate,
+      synopsis: obj.synopsis,
+      averageRating: obj.averageRating,
+      posterImage: obj.posterImage,
+      type: type,
+    };
+
+    dispatch(
+      addToList({
+        category: type.split(' ').join('_'),
+        item: newObj,
+      }),
+    );
   };
 
   React.useEffect(() => {
@@ -224,8 +328,44 @@ const AnimeInfo = () => {
     }
   }, [animeId, dispatch, cookies.animeId]);
 
+  const escapeListener = React.useCallback(
+    (e) => {
+      if (e.key === 'Escape') {
+        closeAddBlock();
+      }
+    },
+    [closeAddBlock],
+  );
+  const clickListener = React.useCallback(
+    (e) => {
+      if (
+        e.target.className &&
+        blockOutRef.current &&
+        e.target.className === blockOutRef.current.className
+      ) {
+        closeAddBlock();
+      }
+    },
+    [blockOutRef, closeAddBlock],
+  );
+  React.useEffect(() => {
+    document.addEventListener('click', clickListener);
+    document.addEventListener('keyup', escapeListener);
+    return () => {
+      document.removeEventListener('click', clickListener);
+      document.removeEventListener('keyup', escapeListener);
+    };
+  }, [clickListener, escapeListener]);
+
+  React.useEffect(() => {
+    visibleAddBlock
+      ? document.querySelector<HTMLElement>('body')?.setAttribute('style', 'overflow: hidden')
+      : document.querySelector<HTMLElement>('body')?.setAttribute('style', 'overflow: auto');
+  }, [visibleAddBlock]);
+
   return (
     <AnimeInfoWrapper>
+      <BlockOutInfo ref={blockOutRef} show={visibleAddBlock}></BlockOutInfo>
       <Container>
         <AnimeTrailer
           youtubeVideoId={youtubeVideoId}
@@ -233,6 +373,17 @@ const AnimeInfo = () => {
           closeTrailer={closeTrailer}
         />
         <AnimeInfoBox>
+          <AnimeAddedBox show={visibleAddBlock}>
+            <span onClick={() => closeAddBlock()}>
+              <img src={removeSvg} alt="remove svg" />
+            </span>
+            <h4>Add to:</h4>
+            {typesList.map((name, index) => (
+              <button key={index} onClick={() => addAnimeToList(name, chosenAnime.data.attributes)}>
+                {name}
+              </button>
+            ))}
+          </AnimeAddedBox>
           <Box>
             {isLoadingInfo ? (
               <>
@@ -256,7 +407,7 @@ const AnimeInfo = () => {
                   </AnimeInfoGenres>
                   <AnimeInfoBottom>
                     <Button onClick={() => openTrailer()}>Watch Trailer</Button>
-                    <AnimeButtonPlus>
+                    <AnimeButtonPlus onClick={() => setVisibleAddBlock(true)}>
                       <img src={plusSvg} alt="plus svg" />
                     </AnimeButtonPlus>
                   </AnimeInfoBottom>
