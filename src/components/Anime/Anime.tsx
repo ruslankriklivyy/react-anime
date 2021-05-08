@@ -6,11 +6,15 @@ import Slider from 'react-slick';
 import { RootState } from '../../redux';
 import { getAnime, getFavoritesAnime, setAnimeId } from '../../redux/anime';
 import { Container } from '../../App';
-import { AnimeItem, AnimeItemLoader } from '..';
+import { AnimeItem, AnimeItemLoader, Button } from '..';
+
+import arrowSvg from '../../assets/img/arrow.svg';
+import { setCurrentPageNumber } from '../../redux/filters';
 
 const AnimeWrapper = styled.section`
   position: relative;
   padding-top: 60px;
+  margin-bottom: 40px;
   .slick-list {
     overflow: unset;
   }
@@ -74,6 +78,12 @@ const AnimeAllBox = styled.div`
   }
 `;
 
+const AnimePaginator = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
 const Anime = () => {
   const dispatch = useDispatch();
   const { animeItems, animeFavoritesItems, isLoading } = useSelector(
@@ -81,8 +91,20 @@ const Anime = () => {
   );
   const { currentGenre, animeSearchValue } = useSelector((state: RootState) => state.filters);
 
+  let { currentPageNumber } = useSelector((state: RootState) => state.filters);
+
   const onSelectAnime = (id: number) => {
     dispatch(setAnimeId(id));
+  };
+
+  const onPlusPageNumber = () => {
+    dispatch(setCurrentPageNumber(currentPageNumber + 12));
+  };
+
+  const onMinusPageNumber = () => {
+    if (currentPageNumber !== 0) {
+      dispatch(setCurrentPageNumber(currentPageNumber - 12));
+    }
   };
 
   const settings = {
@@ -124,8 +146,8 @@ const Anime = () => {
   }, [dispatch]);
 
   React.useEffect(() => {
-    dispatch(getFavoritesAnime({ animeSearchValue, currentGenre }));
-  }, [dispatch, animeSearchValue, currentGenre]);
+    dispatch(getFavoritesAnime({ animeSearchValue, currentGenre, currentPageNumber }));
+  }, [dispatch, animeSearchValue, currentGenre, currentPageNumber]);
 
   return (
     <AnimeWrapper>
@@ -160,6 +182,16 @@ const Anime = () => {
                 .fill(0)
                 .map((_, index) => <AnimeItemLoader key={index} />)}
         </AnimeAllBox>
+        <AnimePaginator>
+          {currentPageNumber > 1 && (
+            <Button onClick={() => onMinusPageNumber()} paginator previous>
+              <img src={arrowSvg} alt="arrow svg" /> <span>Previous Page</span>
+            </Button>
+          )}
+          <Button onClick={() => onPlusPageNumber()} paginator>
+            <span>Next Page</span> <img src={arrowSvg} alt="arrow svg" />
+          </Button>
+        </AnimePaginator>
       </Container>
     </AnimeWrapper>
   );

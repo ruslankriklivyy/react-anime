@@ -6,6 +6,7 @@ const initialState = {
   animeSearchValue: '' as string,
   animeGenres: null as GenresResponse | null,
   currentGenre: null as string | null,
+  currentPageNumber: 0 as number,
 };
 
 export const getGenres = createAsyncThunk('filters/getGenres', async (props, thunkApi) => {
@@ -26,8 +27,16 @@ const filters = createSlice({
     setCurrentGenre: (state, action: PayloadAction<string>) => {
       state.currentGenre = action.payload;
     },
+    setCurrentPageNumber: (state, action: PayloadAction<number>) => {
+      state.currentPageNumber = action.payload;
+    },
   },
 });
 
 export default filters.reducer;
-export const { setAnimeSearchValue, setGenres, setCurrentGenre } = filters.actions;
+export const {
+  setAnimeSearchValue,
+  setGenres,
+  setCurrentGenre,
+  setCurrentPageNumber,
+} = filters.actions;

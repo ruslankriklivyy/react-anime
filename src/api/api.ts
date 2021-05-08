@@ -35,12 +35,15 @@ export const animeApi = {
   fetchFavoritesAnime(
     animeSearchValue: string,
     currentGenre: string | null,
+    currentPageNumber: number,
   ): Promise<Array<Anime>> {
     return instance
       .get(
         `anime?sort=-favoritesCount&page[limit]=12${
           animeSearchValue !== '' ? `&filter[text]=${animeSearchValue}` : ''
-        }${currentGenre !== null ? `&filter[genres]=${currentGenre}` : ''}`,
+        }${
+          currentGenre !== null ? `&filter[genres]=${currentGenre}` : ''
+        }&page[offset]=${currentPageNumber}`,
       )
       .then(({ data }) => data.data);
   },

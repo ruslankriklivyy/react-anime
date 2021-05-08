@@ -23,6 +23,7 @@ const initialState = {
 interface IGetFavoritesAnime {
   animeSearchValue: string;
   currentGenre: string | null;
+  currentPageNumber: number;
 }
 interface IAnimeId {
   animeId: number | null;
@@ -39,7 +40,11 @@ export const getFavoritesAnime = createAsyncThunk(
   'anime/getFavoritesAnime',
   async (props: IGetFavoritesAnime, thunkAPI) => {
     thunkAPI.dispatch(setIsLoading(false));
-    const data = await animeApi.fetchFavoritesAnime(props.animeSearchValue, props.currentGenre);
+    const data = await animeApi.fetchFavoritesAnime(
+      props.animeSearchValue,
+      props.currentGenre,
+      props.currentPageNumber,
+    );
     thunkAPI.dispatch(setFavoritesAnimeItems(data));
     thunkAPI.dispatch(setIsLoading(true));
   },

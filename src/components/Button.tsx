@@ -6,7 +6,6 @@ const Button = (props: any) => {
 };
 
 const ButtonWrapper = styled.button`
-  display: block;
   background-color: transparent;
   padding: 12px 24px;
   font-size: 19px;
@@ -18,11 +17,22 @@ const ButtonWrapper = styled.button`
   border-radius: 15px;
   transition: all 0.3s ease;
   cursor: pointer;
+  ${(props: any) => (props.paginator ? 'display: flex' : 'display: block;')};
+  align-items: center;
   &:active {
     transform: translateY(7px);
   }
   &:hover {
     background-color: #ffb400;
+  }
+  img {
+    display: block;
+    width: 24px;
+    height: 24px;
+    ${(props: any) => props.previous && 'transform: rotate(180deg);'};
+  }
+  span {
+    padding: 0 10px;
   }
 `;
 

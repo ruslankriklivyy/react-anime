@@ -9,6 +9,7 @@ import { setAnimeId } from '../redux/anime';
 import { removeItemFromList, setTypeList } from '../redux/list';
 
 import trashSvg from '../assets/img/trash.svg';
+import emptyBoxSvg from '../assets/img/empty-box.svg';
 
 const AnimeListWrapper = styled.div`
   display: flex;
@@ -80,6 +81,28 @@ const AnimeListItem = styled.div`
   }
 `;
 
+const AnimeListEmpty = styled.div`
+  top: 50%;
+  ${(props: IAnimeListEmpty) => (props.types ? 'position: static' : 'position: absolute;')}
+  ${(props: IAnimeListEmpty) => (props.types ? '' : 'transform: translate(-50%, -50%);')}
+  left: 50%;
+  opacity: 0.6;
+  text-align: center;
+  img {
+    display: block;
+    margin-bottom: 40px;
+  }
+  span {
+    font-weight: 500;
+    font-size: 34px;
+    letter-spacing: 1px;
+  }
+`;
+
+interface IAnimeListEmpty {
+  types: boolean;
+}
+
 const typesList = ['Plan to watch', 'Checked', 'Liked', "Didn't like it."];
 
 const AnimeList = () => {
@@ -101,33 +124,46 @@ const AnimeList = () => {
   return (
     <>
       <Container>
-        <AnimeListTypes>
-          {typesList.map((name, index) => (
-            <AnimeListButton
-              key={index}
-              onClick={() => onSelectListType(name)}
-              active={name === currentType}>
-              {name}
-            </AnimeListButton>
-          ))}
-        </AnimeListTypes>
-        <AnimeListWrapper>
-          {listItems.map(
-            (list: any) =>
-              list.type === currentType && (
-                <AnimeListItem>
-                  <RemoveButton onClick={() => onRemove(list.id)}>
-                    <img src={trashSvg} alt="trash svg" />
-                  </RemoveButton>
-                  <AnimeItem
-                    key={list.id}
-                    item={list}
-                    selectItem={() => onSelectAnime(Number(list.id))}
-                  />
-                </AnimeListItem>
-              ),
-          )}
-        </AnimeListWrapper>
+        {listItems.length === 0 ? (
+          <AnimeListEmpty>
+            <img src={emptyBoxSvg} alt="empty box svg" />
+            <span>Add anime to the list</span>
+          </AnimeListEmpty>
+        ) : (
+          <>
+            <AnimeListTypes>
+              {typesList.map((name, index) => (
+                <AnimeListButton
+                  key={index}
+                  onClick={() => onSelectListType(name)}
+                  active={name === currentType}>
+                  {name}
+                </AnimeListButton>
+              ))}
+            </AnimeListTypes>
+            <AnimeListWrapper>
+              {listItems.map((list: any) =>
+                list.type === currentType ? (
+                  <AnimeListItem>
+                    <RemoveButton onClick={() => onRemove(list.id)}>
+                      <img src={trashSvg} alt="trash svg" />
+                    </RemoveButton>
+                    <AnimeItem
+                      key={list.id}
+                      item={list}
+                      selectItem={() => onSelectAnime(Number(list.id))}
+                    />
+                  </AnimeListItem>
+                ) : (
+                  <AnimeListEmpty types>
+                    <img src={emptyBoxSvg} alt="empty box svg" />
+                    <span>Add anime to the list</span>
+                  </AnimeListEmpty>
+                ),
+              )}
+            </AnimeListWrapper>
+          </>
+        )}
       </Container>
     </>
   );
