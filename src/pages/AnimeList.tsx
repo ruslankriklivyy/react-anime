@@ -120,8 +120,18 @@ const AnimeList = () => {
   };
 
   const onRemove = (id: number, type: string) => {
-    dispatch(removeTypeFromList(type));
     dispatch(removeItemFromList(id));
+    // let checkType = storageList.some((list: any) => list.type !== type);
+    // console.log(checkType);
+    // if (checkType) {
+    //   dispatch(removeTypeFromList(type));
+    // }
+    storageList.forEach((list: any) => {
+      if (list.type !== type) {
+        // dispatch(removeTypeFromList(type));
+        return;
+      }
+    });
   };
 
   return (

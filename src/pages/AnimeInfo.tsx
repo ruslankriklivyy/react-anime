@@ -293,13 +293,13 @@ const AnimeInfo = () => {
       type,
     };
 
-    dispatch(addTypeToList(type));
     dispatch(
       addToList({
         category: type.split(' ').join('_'),
         item: newObj,
       }),
     );
+    dispatch(addTypeToList(type));
 
     closeAddBlock();
   };

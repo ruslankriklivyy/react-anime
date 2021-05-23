@@ -34,27 +34,24 @@ const list = createSlice({
     },
     removeItemFromList: (state, action) => {
       const newItems = state.listItems.filter((i: any) => i.id !== action.payload);
-      const storageList = JSON.parse(localStorage.getItem('list') || '[]');
 
       state.listItems = newItems;
-      const newStorageList = storageList.filter((item: any) => item.id !== action.payload);
-      localStorage.setItem('list', JSON.stringify(newStorageList));
+      localStorage.setItem('list', JSON.stringify(newItems));
     },
     addTypeToList: (state, action) => {
       if (!state.allTypes.includes(action.payload)) {
         state.allTypes.push(action.payload);
-        if (state.allTypes.length > 0) {
-          localStorage.setItem('listTypes', JSON.stringify(state.allTypes));
-        }
+
+        localStorage.setItem('listTypes', JSON.stringify(state.allTypes));
       }
     },
     removeTypeFromList: (state, action) => {
-      const storageListTypes = JSON.parse(localStorage.getItem('listTypes') || '[]');
-      const newStorageListTypes = storageListTypes.filter(
-        (type: string) => type !== action.payload,
-      );
       state.allTypes = state.allTypes.filter((type) => type !== action.payload);
-      localStorage.setItem('listTypes', JSON.stringify(newStorageListTypes));
+
+      localStorage.setItem('listTypes', JSON.stringify(state.allTypes));
+      if (state.listItems.length === 0) {
+        localStorage.removeItem('listTypes');
+      }
     },
   },
 });
