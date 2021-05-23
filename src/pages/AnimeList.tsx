@@ -108,6 +108,7 @@ const typesList = ['Plan to watch', 'Checked', 'Liked', "Didn't like it."];
 const AnimeList = () => {
   const dispatch = useDispatch();
   const { listItems, currentType } = useSelector((state: RootState) => state.list);
+  const storageList = JSON.parse(localStorage.getItem('list') || '[]');
 
   const onSelectAnime = (id: number) => {
     dispatch(setAnimeId(id));
@@ -124,7 +125,7 @@ const AnimeList = () => {
   return (
     <>
       <Container>
-        {listItems.length === 0 ? (
+        {storageList.length === 0 ? (
           <AnimeListEmpty>
             <img src={emptyBoxSvg} alt="empty box svg" />
             <span>Add anime to the list</span>
@@ -142,24 +143,20 @@ const AnimeList = () => {
               ))}
             </AnimeListTypes>
             <AnimeListWrapper>
-              {listItems.map((list: any) =>
-                list.type === currentType ? (
-                  <AnimeListItem>
-                    <RemoveButton onClick={() => onRemove(list.id)}>
-                      <img src={trashSvg} alt="trash svg" />
-                    </RemoveButton>
-                    <AnimeItem
-                      key={list.id}
-                      item={list}
-                      selectItem={() => onSelectAnime(Number(list.id))}
-                    />
-                  </AnimeListItem>
-                ) : (
-                  <AnimeListEmpty types>
-                    <img src={emptyBoxSvg} alt="empty box svg" />
-                    <span>Add anime to the list</span>
-                  </AnimeListEmpty>
-                ),
+              {storageList.map(
+                (list: any) =>
+                  list.type === currentType && (
+                    <AnimeListItem>
+                      <RemoveButton onClick={() => onRemove(list.id)}>
+                        <img src={trashSvg} alt="trash svg" />
+                      </RemoveButton>
+                      <AnimeItem
+                        key={list.id}
+                        item={list}
+                        selectItem={() => onSelectAnime(Number(list.id))}
+                      />
+                    </AnimeListItem>
+                  ),
               )}
             </AnimeListWrapper>
           </>
