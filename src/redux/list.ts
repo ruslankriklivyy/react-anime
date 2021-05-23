@@ -1,7 +1,8 @@
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 const initialState = {
   listItems: [] as any,
+  allTypes: [] as string[],
   currentType: 'Plan to watch' as string,
 };
 
@@ -39,8 +40,25 @@ const list = createSlice({
       const newStorageList = storageList.filter((item: any) => item.id !== action.payload);
       localStorage.setItem('list', JSON.stringify(newStorageList));
     },
+    addTypeToList: (state, action) => {
+      if (!state.allTypes.includes(action.payload)) {
+        state.allTypes.push(action.payload);
+        if (state.allTypes.length > 0) {
+          localStorage.setItem('listTypes', JSON.stringify(state.allTypes));
+        }
+      }
+    },
+    removeTypeFromList: (state, action) => {
+      const storageListTypes = JSON.parse(localStorage.getItem('listTypes') || '[]');
+      const newStorageListTypes = storageListTypes.filter(
+        (type: string) => type !== action.payload,
+      );
+      state.allTypes = state.allTypes.filter((type) => type !== action.payload);
+      localStorage.setItem('listTypes', JSON.stringify(newStorageListTypes));
+    },
   },
 });
 
 export default list.reducer;
-export const { addToList, setTypeList, removeItemFromList } = list.actions;
+export const { addToList, setTypeList, removeItemFromList, addTypeToList, removeTypeFromList } =
+  list.actions;

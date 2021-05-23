@@ -6,7 +6,7 @@ import { Container } from '../App';
 import { AnimeItem } from '../components';
 import { RootState } from '../redux';
 import { setAnimeId } from '../redux/anime';
-import { removeItemFromList, setTypeList } from '../redux/list';
+import { removeItemFromList, removeTypeFromList, setTypeList } from '../redux/list';
 
 import trashSvg from '../assets/img/trash.svg';
 import emptyBoxSvg from '../assets/img/empty-box.svg';
@@ -14,6 +14,7 @@ import emptyBoxSvg from '../assets/img/empty-box.svg';
 const AnimeListWrapper = styled.div`
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   margin-top: 50px;
 `;
 
@@ -73,7 +74,8 @@ const RemoveButton = styled.button`
 
 const AnimeListItem = styled.div`
   position: relative;
-  margin-right: 20px;
+  margin-right: 40px;
+  margin-bottom: 40px;
   &:hover {
     ${RemoveButton} {
       top: -32px;
@@ -103,12 +105,11 @@ interface IAnimeListEmpty {
   types: boolean;
 }
 
-const typesList = ['Plan to watch', 'Checked', 'Liked', "Didn't like it."];
-
 const AnimeList = () => {
   const dispatch = useDispatch();
-  const { listItems, currentType } = useSelector((state: RootState) => state.list);
+  const { currentType } = useSelector((state: RootState) => state.list);
   const storageList = JSON.parse(localStorage.getItem('list') || '[]');
+  const storageListTypes = JSON.parse(localStorage.getItem('listTypes') || '[]');
 
   const onSelectAnime = (id: number) => {
     dispatch(setAnimeId(id));
@@ -118,7 +119,8 @@ const AnimeList = () => {
     dispatch(setTypeList(type));
   };
 
-  const onRemove = (id: number) => {
+  const onRemove = (id: number, type: string) => {
+    dispatch(removeTypeFromList(type));
     dispatch(removeItemFromList(id));
   };
 
@@ -133,7 +135,7 @@ const AnimeList = () => {
         ) : (
           <>
             <AnimeListTypes>
-              {typesList.map((name, index) => (
+              {storageListTypes.map((name: string, index: number) => (
                 <AnimeListButton
                   key={index}
                   onClick={() => onSelectListType(name)}
@@ -147,7 +149,7 @@ const AnimeList = () => {
                 (list: any) =>
                   list.type === currentType && (
                     <AnimeListItem>
-                      <RemoveButton onClick={() => onRemove(list.id)}>
+                      <RemoveButton onClick={() => onRemove(list.id, list.type)}>
                         <img src={trashSvg} alt="trash svg" />
                       </RemoveButton>
                       <AnimeItem

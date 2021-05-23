@@ -6,7 +6,7 @@ import { useCookies } from 'react-cookie';
 import { getGenresAnime, getOneAnime, setAnimeId } from '../redux/anime';
 import { Container } from '../App';
 import { RootState } from '../redux';
-import { addToList } from '../redux/list';
+import { addToList, addTypeToList } from '../redux/list';
 import { AttributesAnime, Genres } from '../types/types';
 import {
   AnimeEpisodes,
@@ -290,9 +290,10 @@ const AnimeInfo = () => {
       synopsis: obj.synopsis,
       averageRating: obj.averageRating,
       posterImage: obj.posterImage,
-      type: type,
+      type,
     };
 
+    dispatch(addTypeToList(type));
     dispatch(
       addToList({
         category: type.split(' ').join('_'),

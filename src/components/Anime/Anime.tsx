@@ -10,6 +10,7 @@ import { AnimeItem, AnimeItemLoader, Button } from '..';
 
 import arrowSvg from '../../assets/img/arrow.svg';
 import { setCurrentPageNumber } from '../../redux/filters';
+import scrollTop from '../../utils/scrollTop';
 
 const AnimeWrapper = styled.section`
   position: relative;
@@ -99,12 +100,14 @@ const Anime = () => {
 
   const onPlusPageNumber = () => {
     dispatch(setCurrentPageNumber(currentPageNumber + 12));
+    scrollTop();
   };
 
   const onMinusPageNumber = () => {
     if (currentPageNumber !== 0) {
       dispatch(setCurrentPageNumber(currentPageNumber - 12));
     }
+    scrollTop();
   };
 
   const settings = {
