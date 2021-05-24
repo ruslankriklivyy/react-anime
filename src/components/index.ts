@@ -13,3 +13,6 @@ export { default as Login } from './Auth/Login';
 export { default as AnimeItemLoader } from './LoaderContent/AnimeItemLoader';
 export { default as AnimeInfoLoader } from './LoaderContent/AnimeInfoLoader';
 export { default as UsersLoader } from './LoaderContent/UsersLoader';
+export { default as AnimeInfoActions } from './Anime/AnimeInfoActions';
+export { default as AnimeAddBox } from './Anime/AnimeAddBox';
+export { default as AnimePageInfo } from './Anime/AnimePageInfo';

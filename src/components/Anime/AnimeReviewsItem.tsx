@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../redux';
 
 import { AnimeReviewsData } from '../../types/types';
-import { Box } from '../../pages/AnimeInfo';
+import { Box } from '../../pages/AnimePage';
 import { getReviewsAnime } from '../../redux/anime';
 
 import loverSvg from '../../assets/img/lover.svg';

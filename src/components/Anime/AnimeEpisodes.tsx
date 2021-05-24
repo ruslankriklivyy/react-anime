@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { RootState } from '../../redux';
-import { Box } from '../../pages/AnimeInfo';
+import { Box } from '../../pages/AnimePage';
 import { getEpisodesAnime } from '../../redux/anime';
 
 import episodesEmptyJpg from '../../assets/img/episodes-empty.jpg';
