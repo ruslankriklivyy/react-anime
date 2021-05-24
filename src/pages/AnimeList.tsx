@@ -6,7 +6,7 @@ import { Container } from '../App';
 import { AnimeItem } from '../components';
 import { RootState } from '../redux';
 import { setAnimeId } from '../redux/anime';
-import { removeItemFromList, removeTypeFromList, setTypeList } from '../redux/list';
+import list, { removeItemFromList, removeTypeFromList, setTypeList } from '../redux/list';
 
 import trashSvg from '../assets/img/trash.svg';
 import emptyBoxSvg from '../assets/img/empty-box.svg';
@@ -109,7 +109,8 @@ const AnimeList = () => {
   const dispatch = useDispatch();
   const { currentType } = useSelector((state: RootState) => state.list);
   const storageList = JSON.parse(localStorage.getItem('list') || '[]');
-  const storageListTypes = JSON.parse(localStorage.getItem('listTypes') || '[]');
+  const listItemsTypes = Object.keys(storageList);
+  const lists = storageList[currentType]?.items;
 
   const onSelectAnime = (id: number) => {
     dispatch(setAnimeId(id));
@@ -120,24 +121,14 @@ const AnimeList = () => {
   };
 
   const onRemove = (id: number, type: string) => {
-    dispatch(removeItemFromList(id));
-    // let checkType = storageList.some((list: any) => list.type !== type);
-    // console.log(checkType);
-    // if (checkType) {
-    //   dispatch(removeTypeFromList(type));
-    // }
-    storageList.forEach((list: any) => {
-      if (list.type !== type) {
-        // dispatch(removeTypeFromList(type));
-        return;
-      }
-    });
+    dispatch(removeItemFromList({ id, type }));
+    dispatch(removeTypeFromList(type));
   };
 
   return (
     <>
       <Container>
-        {storageList.length === 0 ? (
+        {Object.keys(storageList).length === 0 ? (
           <AnimeListEmpty>
             <img src={emptyBoxSvg} alt="empty box svg" />
             <span>Add anime to the list</span>
@@ -145,17 +136,17 @@ const AnimeList = () => {
         ) : (
           <>
             <AnimeListTypes>
-              {storageListTypes.map((name: string, index: number) => (
+              {listItemsTypes.map((item: any) => (
                 <AnimeListButton
-                  key={index}
-                  onClick={() => onSelectListType(name)}
-                  active={name === currentType}>
-                  {name}
+                  key={item}
+                  onClick={() => onSelectListType(item)}
+                  active={item === currentType}>
+                  {item}
                 </AnimeListButton>
               ))}
             </AnimeListTypes>
             <AnimeListWrapper>
-              {storageList.map(
+              {lists?.map(
                 (list: any) =>
                   list.type === currentType && (
                     <AnimeListItem>

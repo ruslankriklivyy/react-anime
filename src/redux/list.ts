@@ -1,8 +1,8 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 const initialState = {
-  listItems: [] as any,
-  allTypes: [] as string[],
+  listItems: {} as any,
+  allTypes: [] as any,
   currentType: 'Plan to watch' as string,
 };
 
@@ -11,47 +11,45 @@ const list = createSlice({
   initialState,
   reducers: {
     addToList: (state, action) => {
-      let ids: Array<string> = [];
-
-      if (state.listItems.length > 0) {
-        state.listItems.forEach((i: any) => {
-          if (i.id === action.payload.item.id) {
-            ids.push(action.payload.item.id);
-          }
-        });
+      if (!state.listItems[action.payload.item.type]) {
+        const newList = {
+          ...state.listItems,
+          [action.payload.item.type]: {
+            items: [action.payload.item],
+          },
+        };
+        state.listItems = newList;
+      } else {
+        const availableCheck = state.listItems[action.payload.item.type].items.some(
+          (item: any) => item.id === action.payload.item.id,
+        );
+        if (!availableCheck) {
+          state.listItems[action.payload.item.type].items.push(action.payload.item);
+        }
       }
-
-      if (state.listItems.length === 0 || ids[ids.length - 1] !== action.payload.item.id) {
-        state.listItems.push(action.payload.item);
-      }
-
-      if (state.listItems.length > 0) {
-        localStorage.setItem('list', JSON.stringify(state.listItems));
-      }
+      localStorage.setItem('list', JSON.stringify(state.listItems));
     },
     setTypeList: (state, action: PayloadAction<string>) => {
       state.currentType = action.payload;
     },
     removeItemFromList: (state, action) => {
-      const newItems = state.listItems.filter((i: any) => i.id !== action.payload);
-
-      state.listItems = newItems;
-      localStorage.setItem('list', JSON.stringify(newItems));
+      state.listItems[action.payload.type].items = state.listItems[
+        action.payload.type
+      ].items.filter((item: any) => item.id !== action.payload.id);
+      localStorage.setItem('list', JSON.stringify(state.listItems));
     },
     addTypeToList: (state, action) => {
       if (!state.allTypes.includes(action.payload)) {
         state.allTypes.push(action.payload);
-
         localStorage.setItem('listTypes', JSON.stringify(state.allTypes));
       }
     },
     removeTypeFromList: (state, action) => {
-      state.allTypes = state.allTypes.filter((type) => type !== action.payload);
-
-      localStorage.setItem('listTypes', JSON.stringify(state.allTypes));
-      if (state.listItems.length === 0) {
-        localStorage.removeItem('listTypes');
+      if (state.listItems[action.payload].items.length === 0) {
+        delete state.listItems[action.payload];
       }
+
+      localStorage.setItem('list', JSON.stringify(state.listItems));
     },
   },
 });
