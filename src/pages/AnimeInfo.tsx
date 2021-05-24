@@ -6,7 +6,7 @@ import { useCookies } from 'react-cookie';
 import { getGenresAnime, getOneAnime, setAnimeId } from '../redux/anime';
 import { Container } from '../App';
 import { RootState } from '../redux';
-import { addToList, addTypeToList } from '../redux/list';
+import { addToList, removeItemFromList, removeTypeFromList } from '../redux/list';
 import { AttributesAnime, Genres } from '../types/types';
 import {
   AnimeEpisodes,
@@ -20,6 +20,7 @@ import scrollTop from '../utils/scrollTop';
 import plusSvg from '../assets/img/plus.svg';
 import starSvg from '../assets/img/star.svg';
 import removeSvg from '../assets/img/cancel.svg';
+import trashSvg from '../assets/img/trash-white.svg';
 
 const AnimeInfoWrapper = styled.div`
   position: relative;
@@ -139,6 +140,9 @@ const AnimeInfoGenre = styled.button`
 const AnimeInfoBottom = styled.div`
   display: flex;
   align-items: center;
+  button {
+    margin-right: 10px;
+  }
 `;
 
 const AnimeInfoGenres = styled.div`
@@ -160,7 +164,6 @@ const AnimeButtonPlus = styled.button`
   background-color: transparent;
   padding: 12px 15px;
   border: 2px solid #ffb400;
-  margin-left: 20px;
   border-radius: 10px;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -224,6 +227,7 @@ const AnimeAddedBox = styled.div`
     border: 2px solid #ffb400;
     border-radius: 10px;
     transition: all 0.3s ease;
+
     &:active {
       transform: translateY(5px);
     }
@@ -260,12 +264,14 @@ const AnimeInfo = () => {
   const { chosenAnime, animeId, genresAnime, isLoadingInfo } = useSelector(
     (state: RootState) => state.anime,
   );
+  const { addedItemsIds } = useSelector((state: RootState) => state.list);
   const { posterImage, titles, startDate, synopsis, averageRating, youtubeVideoId } =
     chosenAnime.hasOwnProperty('data') && chosenAnime.data.attributes;
 
   const [visibleTrailer, setVisibleTrailer] = React.useState(false);
   const [visibleAddBlock, setVisibleAddBlock] = React.useState(false);
   const blockOutRef = React.useRef<HTMLDivElement>(null);
+  const storageListTypeById = JSON.parse(localStorage.getItem('listTypeById') || '{}');
 
   const [cookies, setCookie] = useCookies(['animeId']);
 
@@ -280,6 +286,13 @@ const AnimeInfo = () => {
   const openTrailer = () => {
     setVisibleTrailer(true);
     scrollTop();
+  };
+
+  const removeAnimeFromList = () => {
+    const type = storageListTypeById[chosenAnime.data.id].type;
+
+    dispatch(removeItemFromList({ id: chosenAnime.data.id, type }));
+    dispatch(removeTypeFromList(type));
   };
 
   const addAnimeToList = (type: string, obj: AttributesAnime) => {
@@ -299,7 +312,6 @@ const AnimeInfo = () => {
         item: newObj,
       }),
     );
-    dispatch(addTypeToList(type));
 
     closeAddBlock();
   };
@@ -407,9 +419,15 @@ const AnimeInfo = () => {
                   </AnimeInfoGenres>
                   <AnimeInfoBottom>
                     <Button onClick={() => openTrailer()}>Watch Trailer</Button>
-                    <AnimeButtonPlus onClick={() => setVisibleAddBlock(true)}>
-                      <img src={plusSvg} alt="plus svg" />
-                    </AnimeButtonPlus>
+                    {!addedItemsIds.includes(chosenAnime.data.id) ? (
+                      <AnimeButtonPlus onClick={() => setVisibleAddBlock(true)}>
+                        <img src={plusSvg} alt="plus svg" />
+                      </AnimeButtonPlus>
+                    ) : (
+                      <Button red onClick={() => removeAnimeFromList()}>
+                        <img src={trashSvg} alt="trashSvg" />
+                      </Button>
+                    )}
                   </AnimeInfoBottom>
                 </AnimeInfoMain>
               </>
