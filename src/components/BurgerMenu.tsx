@@ -24,7 +24,11 @@ const BurgerMenu: React.FC<IBurgerMenu> = ({
         <img src={closeSvg} alt="closeSvg" />
       </BurgerMenuClose>
       <BurgerMenuBox>
-        <Categories burgerMenu toggleVisibleGenres={toggleVisibleGenres} />
+        <Categories
+          burgerMenu
+          onCloseBurgerMenu={onCloseBurgerMenu}
+          toggleVisibleGenres={toggleVisibleGenres}
+        />
         <HeaderActions burgerMenu toggleVisibleAuth={toggleVisibleAuth} />
       </BurgerMenuBox>
     </BurgerMenuWrapper>

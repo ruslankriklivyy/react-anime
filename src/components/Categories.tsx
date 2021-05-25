@@ -7,14 +7,19 @@ const categoriesArr = ['Home', 'Anime List', 'Users'];
 
 interface ICategories {
   toggleVisibleGenres: (e: React.MouseEvent) => void;
+  onCloseBurgerMenu?: () => void;
   burgerMenu?: boolean;
 }
 
-const Categories: React.FC<ICategories> = ({ toggleVisibleGenres, burgerMenu }) => {
+const Categories: React.FC<ICategories> = ({
+  toggleVisibleGenres,
+  onCloseBurgerMenu,
+  burgerMenu,
+}) => {
   return (
     <CategoriesWrapper burgerMenu={burgerMenu}>
       {categoriesArr.map((name, index) => (
-        <li key={index}>
+        <li key={index} onClick={() => onCloseBurgerMenu && onCloseBurgerMenu()}>
           <Link to={`/${name.toLowerCase().split(' ').join('')}`}>{name}</Link>
         </li>
       ))}

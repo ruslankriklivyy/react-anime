@@ -10,6 +10,7 @@ import { removeItemFromList, removeTypeFromList, setTypeList } from '../redux/li
 
 import trashSvg from '../assets/img/trash.svg';
 import emptyBoxSvg from '../assets/img/empty-box.svg';
+import { device } from '../utils/deviceMedia';
 
 interface IAnimeListEmpty {
   types: boolean;
@@ -107,6 +108,19 @@ const AnimeListButton = styled.button`
   &:active {
     transform: translateY(5px);
   }
+  @media ${device.laptop} {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-right: 10px;
+    margin-left: 10px;
+  }
+  @media ${device.mobile} {
+    margin-top: 8px;
+    margin-bottom: 8px;
+    margin-right: 8px;
+    margin-left: 8px;
+    font-size: 18px;
+  }
 `;
 
 const AnimeListTypes = styled.div`
@@ -139,6 +153,14 @@ const RemoveButton = styled.button`
     &:hover {
       opacity: 0.8;
     }
+  }
+  @media ${device.laptop} {
+    position: static;
+    margin-left: 10px;
+    margin-bottom: 3px;
+  }
+  @media ${device.mobile} {
+    margin-left: 30px;
   }
 `;
 
