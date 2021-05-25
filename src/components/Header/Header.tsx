@@ -5,12 +5,129 @@ import { Link } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
 
 import { Container } from '../../App';
-import { Auth, Categories, HeaderActions, HeaderGenres } from '..';
+import { Auth, BurgerMenu, Categories, HeaderActions, HeaderGenres } from '..';
 import { getGenres } from '../../redux/filters';
 import { RootState } from '../../redux';
 import { setIsAuth } from '../../redux/users';
 
 import closeSvg from '../../assets/img/cancel.svg';
+import menuSvg from '../../assets/img/menu.svg';
+import { device } from '../../utils/deviceMedia';
+
+interface IHeaderBottom {
+  show: boolean;
+}
+
+const Header = () => {
+  const dispatch = useDispatch();
+  const { token, userInfo } = useSelector((state: RootState) => state.users);
+
+  const [visibleGenres, setVisibleGenres] = React.useState(false);
+  const [visibleAuth, setVisibleAuth] = React.useState(false);
+  const [visibleBurgerMenu, setVisibleBurgerMenu] = React.useState(false);
+  const blockOutRef = React.useRef<HTMLDivElement>(null);
+
+  const [cookies, setCookie] = useCookies(['token']);
+
+  const toggleVisibleGenres = (e?: React.MouseEvent) => {
+    e?.preventDefault();
+    setVisibleGenres(!visibleGenres);
+  };
+
+  const toggleVisibleAuth = () => {
+    setVisibleAuth(!visibleAuth);
+  };
+
+  const onCloseAuth = () => {
+    setVisibleAuth(false);
+  };
+
+  const onCloseBurgerMenu = () => {
+    setVisibleBurgerMenu(false);
+  };
+
+  React.useEffect(() => {
+    if (token !== null) {
+      setCookie('token', token, { path: '/' });
+    }
+  }, [token, setCookie]);
+
+  React.useEffect(() => {
+    if (userInfo.email !== '') {
+      setCookie('userInfo', userInfo, { path: '/' });
+    }
+  }, [userInfo, setCookie]);
+
+  React.useEffect(() => {
+    if (cookies.token) {
+      dispatch(setIsAuth(true));
+    } else {
+      dispatch(setIsAuth(false));
+    }
+  }, [dispatch, cookies]);
+
+  React.useEffect(() => {
+    dispatch(getGenres());
+  }, [dispatch]);
+
+  return (
+    <HeaderWrapper>
+      <BlockOut ref={blockOutRef} show={visibleAuth}></BlockOut>
+      <Container>
+        <HeaderTop>
+          <Title>
+            <Link to="/">React Anime</Link>
+          </Title>
+          <Categories toggleVisibleGenres={toggleVisibleGenres} />
+          {visibleBurgerMenu && (
+            <BurgerMenu
+              toggleVisibleGenres={toggleVisibleGenres}
+              toggleVisibleAuth={toggleVisibleAuth}
+              onCloseBurgerMenu={onCloseBurgerMenu}
+            />
+          )}
+          <HeaderRight>
+            {!visibleBurgerMenu && (
+              <BurgerMenuButton onClick={() => setVisibleBurgerMenu(true)}>
+                <img src={menuSvg} alt="menuSvg" />
+              </BurgerMenuButton>
+            )}
+            <HeaderActions toggleVisibleAuth={toggleVisibleAuth} />
+          </HeaderRight>
+        </HeaderTop>
+        <HeaderBottom show={visibleGenres}>
+          <HeaderBottomClose onClick={() => toggleVisibleGenres()}>
+            <img src={closeSvg} alt="close svg" />
+          </HeaderBottomClose>
+          <HeaderGenres />
+        </HeaderBottom>
+        <Auth
+          blockOutRef={blockOutRef}
+          visibleAuth={visibleAuth}
+          toggleVisibleAuth={toggleVisibleAuth}
+          onCloseAuth={onCloseAuth}
+        />
+      </Container>
+    </HeaderWrapper>
+  );
+};
+
+export default Header;
+
+const BurgerMenuButton = styled.button`
+  display: none;
+  cursor: pointer;
+  background: transparent;
+  border: none;
+  height: 40px;
+  @media ${device.laptopL} {
+    display: block;
+  }
+  img {
+    width: 50px;
+    height: 30px;
+  }
+`;
 
 const HeaderWrapper = styled.header`
   padding-top: 25px;
@@ -86,88 +203,5 @@ const BlockOut = styled.div`
   width: 100%;
   height: 100%;
   background: rgba(0, 0, 0, 0.8);
-  z-index: 700;
+  z-index: 800;
 `;
-
-interface IHeaderBottom {
-  show: boolean;
-}
-
-const Header = () => {
-  const dispatch = useDispatch();
-  const { token, userInfo } = useSelector((state: RootState) => state.users);
-
-  const [visibleGenres, setVisibleGenres] = React.useState(false);
-  const [visibleAuth, setVisibleAuth] = React.useState(false);
-  const blockOutRef = React.useRef<HTMLDivElement>(null);
-
-  const [cookies, setCookie] = useCookies(['token']);
-
-  const toggleVisibleGenres = (e?: React.MouseEvent) => {
-    e?.preventDefault();
-    setVisibleGenres(!visibleGenres);
-  };
-
-  const toggleVisibleAuth = () => {
-    setVisibleAuth(!visibleAuth);
-  };
-
-  const onCloseAuth = () => {
-    setVisibleAuth(false);
-  };
-
-  React.useEffect(() => {
-    if (token !== null) {
-      setCookie('token', token, { path: '/' });
-    }
-  }, [token, setCookie]);
-
-  React.useEffect(() => {
-    if (userInfo.email !== '') {
-      setCookie('userInfo', userInfo, { path: '/' });
-    }
-  }, [userInfo, setCookie]);
-
-  React.useEffect(() => {
-    if (cookies.token) {
-      dispatch(setIsAuth(true));
-    } else {
-      dispatch(setIsAuth(false));
-    }
-  }, [dispatch, cookies]);
-
-  React.useEffect(() => {
-    dispatch(getGenres());
-  }, [dispatch]);
-
-  return (
-    <HeaderWrapper>
-      <BlockOut ref={blockOutRef} show={visibleAuth}></BlockOut>
-      <Container>
-        <HeaderTop>
-          <Title>
-            <Link to="/">React Anime</Link>
-          </Title>
-          <Categories toggleVisibleGenres={toggleVisibleGenres} />
-          <HeaderRight>
-            <HeaderActions toggleVisibleAuth={toggleVisibleAuth} />
-          </HeaderRight>
-        </HeaderTop>
-        <HeaderBottom show={visibleGenres}>
-          <HeaderBottomClose onClick={() => toggleVisibleGenres()}>
-            <img src={closeSvg} alt="close svg" />
-          </HeaderBottomClose>
-          <HeaderGenres />
-        </HeaderBottom>
-        <Auth
-          blockOutRef={blockOutRef}
-          visibleAuth={visibleAuth}
-          toggleVisibleAuth={toggleVisibleAuth}
-          onCloseAuth={onCloseAuth}
-        />
-      </Container>
-    </HeaderWrapper>
-  );
-};
-
-export default Header;

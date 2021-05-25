@@ -1,64 +1,81 @@
-export type AttributesGenres = {
+export interface AttributesGenres {
   name: string;
   slug: string;
-};
+}
 
-export type Genres = {
+export interface ListTypeById {
+  [id: string]: {
+    type: string;
+  };
+}
+
+export interface ListItem extends AttributesAnime {
+  type: string;
+  id: number;
+}
+
+export interface ListItems {
+  [type: string]: {
+    items: ListItem[];
+  };
+}
+
+export interface Genres {
   attributes: AttributesGenres;
   id: string;
   type: string;
-};
+}
 
-export type GenresResponse = {
+export interface GenresResponse {
   data: Array<Genres>;
-};
+}
 
-export type Image = {
+export interface Image {
   large: string;
   original: string;
   small: string;
   tiny: string;
   medium?: string;
-};
+}
 
-export type AnimeTitles = {
+export interface AnimeTitles {
   en: string;
   en_jp: string;
-};
+}
 
-export type AttributesAnime = {
+export interface AttributesAnime {
   averageRating: string;
-  coverImage: Image;
-  description: string;
-  episodeCount: number;
+  coverImage?: Image;
+  description?: string;
+  episodeCount?: number;
   posterImage: Image;
-  ratingRank: number;
-  slug: string;
+  ratingRank?: number;
+  slug?: string;
   synopsis: string;
   titles: AnimeTitles;
-  youtubeVideoId: string;
+  youtubeVideoId?: string;
   startDate: string;
-};
+}
 
-export type Anime = {
+export interface Anime {
   attributes: AttributesAnime | any;
   id: string;
   type: string;
-};
+}
 
-export type AnimeResponse = {
+export interface AnimeResponse {
   data: Array<Anime>;
-};
+}
 
-export type AnimeOneResponse = {
+export interface AnimeOneResponse {
   data: Anime;
-};
+}
 
-export type ThumbnailEpisodes = {
+export interface ThumbnailEpisodes {
   original: string;
-};
+}
 
-export type AttributesAnimeEpisodes = {
+export interface AttributesAnimeEpisodes {
   id: string;
   airdate: string;
   canonicalTitle: string;
@@ -68,19 +85,19 @@ export type AttributesAnimeEpisodes = {
   seasonNumber: number;
   synopsis: string;
   thumbnail: ThumbnailEpisodes;
-};
+}
 
-export type AnimeEpisodes = {
+export interface AnimeEpisodes {
   attributes: AttributesAnimeEpisodes | any;
   id: string;
   type: string;
-};
+}
 
-export type AnimeEpisodesResponse = {
+export interface AnimeEpisodesResponse {
   data: Array<AnimeEpisodes>;
-};
+}
 
-export type UsersAttributes = {
+export interface UsersAttributes {
   avatar: Image;
   coverImage: Image;
   name: string;
@@ -90,36 +107,36 @@ export type UsersAttributes = {
   favoritesCount: number;
   followersCount: number;
   gender: string;
-};
+}
 
-export type UsersData = {
+export interface UsersData {
   attributes: UsersAttributes;
   id: string;
   type: string;
-};
+}
 
-export type UsersRespones = {
+export interface UsersRespones {
   data: Array<UsersData>;
-};
+}
 
-export type AnimeReviewsAttributes = {
+export interface AnimeReviewsAttributes {
   content: string;
   likesCount: number;
   rating: number;
   spoiler: boolean;
-};
+}
 
-export type AnimeReviewsData = {
+export interface AnimeReviewsData {
   attributes: AnimeReviewsAttributes;
   id: string;
   type: string;
-};
+}
 
-export type AnimeReviewsResponse = {
+export interface AnimeReviewsResponse {
   data: Array<AnimeReviewsData>;
-};
+}
 
-export type Token = {
+export interface Token {
   access_token: string;
   created_at: number;
   expires_in: number;
@@ -127,4 +144,4 @@ export type Token = {
   scope: string;
   token_type: string;
   error?: string;
-};
+}

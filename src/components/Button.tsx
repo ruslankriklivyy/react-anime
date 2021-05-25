@@ -1,11 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
+import { device } from '../utils/deviceMedia';
 
 const Button = (props: any) => {
   return <ButtonWrapper {...props}>{props.children}</ButtonWrapper>;
 };
 
-const ButtonWrapper = styled.button`
+export const ButtonWrapper = styled.button`
   background-color: transparent;
   padding: 12px 24px;
   font-size: 19px;
@@ -33,6 +34,10 @@ const ButtonWrapper = styled.button`
   }
   span {
     padding: 0 10px;
+  }
+  @media ${device.mobile} {
+    padding: 10px 14px;
+    font-size: 16px;
   }
 `;
 

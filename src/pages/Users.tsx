@@ -5,12 +5,50 @@ import styled from 'styled-components';
 import { RootState } from '../redux';
 import { Container } from '../App';
 import { getUsers } from '../redux/users';
-import { UsersData } from '../types/types';
+import { UsersData } from '../interfaces/interfaces';
 import { UsersLoader } from '../components';
 
 import userPng from '../assets/img/empty-user.png';
 import loverSvg from '../assets/img/lover.svg';
 import followersSvg from '../assets/img/followers.svg';
+
+const Users = () => {
+  const dispatch = useDispatch();
+  const { users, isLoading } = useSelector((state: RootState) => state.users);
+
+  React.useEffect(() => {
+    dispatch(getUsers());
+  }, [dispatch]);
+
+  return (
+    <Container>
+      <UsersBox>
+        {isLoading
+          ? users?.data.map((item: UsersData) => (
+              <UsersItem key={item.id}>
+                <img src={item.attributes.avatar?.large || userPng} alt="avatar" />
+                <h4>{item.attributes.name}</h4>
+                <UsersItemBottom>
+                  <UsersItemInfo>
+                    favorites: {item.attributes.favoritesCount}
+                    <img src={loverSvg} alt="lover svg" />
+                  </UsersItemInfo>
+                  <UsersItemInfo>
+                    followers: {item.attributes.followersCount}
+                    <img src={followersSvg} alt="followers svg" />
+                  </UsersItemInfo>
+                </UsersItemBottom>
+              </UsersItem>
+            ))
+          : Array(20)
+              .fill(0)
+              .map((_, index) => <UsersLoader key={index} />)}
+      </UsersBox>
+    </Container>
+  );
+};
+
+export default Users;
 
 const UsersBox = styled.div`
   display: flex;
@@ -57,41 +95,3 @@ const UsersItemInfo = styled.div`
   align-items: center;
   margin-top: 4px;
 `;
-
-const Users = () => {
-  const dispatch = useDispatch();
-  const { users, isLoading } = useSelector((state: RootState) => state.users);
-
-  React.useEffect(() => {
-    dispatch(getUsers());
-  }, [dispatch]);
-
-  return (
-    <Container>
-      <UsersBox>
-        {isLoading
-          ? users?.data.map((item: UsersData) => (
-              <UsersItem key={item.id}>
-                <img src={item.attributes.avatar?.large || userPng} alt="avatar" />
-                <h4>{item.attributes.name}</h4>
-                <UsersItemBottom>
-                  <UsersItemInfo>
-                    favorites: {item.attributes.favoritesCount}
-                    <img src={loverSvg} alt="lover svg" />
-                  </UsersItemInfo>
-                  <UsersItemInfo>
-                    followers: {item.attributes.followersCount}
-                    <img src={followersSvg} alt="followers svg" />
-                  </UsersItemInfo>
-                </UsersItemBottom>
-              </UsersItem>
-            ))
-          : Array(20)
-              .fill(0)
-              .map((_, index) => <UsersLoader key={index} />)}
-      </UsersBox>
-    </Container>
-  );
-};
-
-export default Users;

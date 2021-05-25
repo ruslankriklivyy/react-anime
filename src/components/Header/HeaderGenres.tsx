@@ -3,32 +3,8 @@ import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { setCurrentGenre } from '../../redux/filters';
-import { Genres } from '../../types/types';
+import { Genres } from '../../interfaces/interfaces';
 import { RootState } from '../../redux';
-
-const HeaderGenre = styled.button`
-  padding: 0 10px;
-  height: 40px;
-  margin: 10px;
-  background: transparent;
-  color: #fff;
-  border: 2px solid #f1b32e;
-  outline: none;
-  border-radius: 12px;
-  font-weight: 500;
-  letter-spacing: 1px;
-  font-size: 18px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  ${(props: IHeaderGenres) =>
-    props.active ? 'background-color: #f1b32e' : 'background-color:transparent'};
-  &:hover {
-    background-color: #f1b32e;
-  }
-  &:active {
-    transform: translateY(6px);
-  }
-`;
 
 interface IHeaderGenres {
   active: boolean;
@@ -56,4 +32,28 @@ const HeaderGenres = () => {
   );
 };
 
-export default HeaderGenres;
+export default React.memo(HeaderGenres);
+
+const HeaderGenre = styled.button`
+  padding: 0 10px;
+  height: 40px;
+  margin: 10px;
+  background: transparent;
+  color: #fff;
+  border: 2px solid #f1b32e;
+  outline: none;
+  border-radius: 12px;
+  font-weight: 500;
+  letter-spacing: 1px;
+  font-size: 18px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  ${(props: IHeaderGenres) =>
+    props.active ? 'background-color: #f1b32e' : 'background-color:transparent'};
+  &:hover {
+    background-color: #f1b32e;
+  }
+  &:active {
+    transform: translateY(6px);
+  }
+`;

@@ -1,18 +1,28 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { ListItem, ListItems, ListTypeById } from '../interfaces/interfaces';
+
+interface RemoveItemFromList {
+  id: number;
+  type: string;
+}
+
+interface AddToList {
+  category: string;
+  item: ListItem;
+}
 
 const initialState = {
-  listItems: {} as any,
-  allTypes: [] as any,
+  listItems: {} as ListItems,
   currentType: 'Plan to watch' as string,
-  addedItemsIds: [] as any,
-  listTypeById: {} as any,
+  addedItemsIds: [] as number[],
+  listTypeById: {} as ListTypeById,
 };
 
 const list = createSlice({
   name: 'list',
   initialState,
   reducers: {
-    addToList: (state, action) => {
+    addToList: (state, action: PayloadAction<AddToList>) => {
       if (!state.listItems[action.payload.item.type]) {
         const newList = {
           ...state.listItems,
@@ -24,7 +34,7 @@ const list = createSlice({
         state.listItems = newList;
       } else {
         const availableCheck = state.listItems[action.payload.item.type].items.some(
-          (item: any) => item.id === action.payload.item.id,
+          (item: ListItem) => item.id === action.payload.item.id,
         );
         if (!availableCheck) {
           state.listItems[action.payload.item.type].items.push(action.payload.item);
@@ -43,22 +53,24 @@ const list = createSlice({
       localStorage.setItem('addedItemsListIds', JSON.stringify(state.addedItemsIds));
       localStorage.setItem('listTypeById', JSON.stringify(state.listTypeById));
     },
+
     setTypeList: (state, action: PayloadAction<string>) => {
       state.currentType = action.payload;
     },
 
-    removeItemFromList: (state, action) => {
+    removeItemFromList: (state, action: PayloadAction<RemoveItemFromList>) => {
       state.listItems[action.payload.type].items = state.listItems[
         action.payload.type
-      ].items.filter((item: any) => item.id !== action.payload.id);
+      ].items.filter((item: ListItem) => item.id !== action.payload.id);
 
       delete state.listTypeById[action.payload.id];
-      state.addedItemsIds = state.addedItemsIds.filter((id: any) => id !== action.payload.id);
+      state.addedItemsIds = state.addedItemsIds.filter((id: number) => id !== action.payload.id);
 
       localStorage.setItem('list', JSON.stringify(state.listItems));
       localStorage.setItem('listTypeById', JSON.stringify(state.listTypeById));
     },
-    removeTypeFromList: (state, action) => {
+
+    removeTypeFromList: (state, action: PayloadAction<string>) => {
       if (state.listItems[action.payload].items.length === 0) {
         delete state.listItems[action.payload];
       }

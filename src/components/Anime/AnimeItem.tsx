@@ -1,10 +1,34 @@
 import React from 'react';
 import styled from 'styled-components';
-
 import { Link } from 'react-router-dom';
 
+import { AttributesAnime } from '../../interfaces/interfaces';
 import starSvg from '../../assets/img/star.svg';
-import { Anime, AttributesAnime } from '../../types/types';
+import { device } from '../../utils/deviceMedia';
+
+interface AnimeItemProps {
+  item: AttributesAnime;
+  selectItem: () => void;
+}
+
+const AnimeItem: React.FC<AnimeItemProps> = ({ item, selectItem }) => {
+  return (
+    <Link to="info">
+      <AnimeItemWrapper onClick={() => selectItem()}>
+        <AnimeBlockout>
+          <h2>{item.titles.en || item.titles.en_jp}</h2>
+        </AnimeBlockout>
+        <AnimeRating>
+          <img src={starSvg} alt="star svg" />
+          <span>{item.averageRating}</span>
+        </AnimeRating>
+        <AnimeImage src={item.posterImage?.medium} />
+      </AnimeItemWrapper>
+    </Link>
+  );
+};
+
+export default AnimeItem;
 
 const AnimeImage = styled.img`
   display: block;
@@ -37,16 +61,31 @@ const AnimeBlockout = styled.div`
   }
 `;
 
-const AnimeItemWrapper = styled.div`
+export const AnimeItemWrapper = styled.div`
   position: relative;
   z-index: 50;
   color: #fff;
-  width: 300px !important;
+  width: 330px !important;
   height: 360px !important;
   border-radius: 20px;
   cursor: pointer;
   transition: all 0.3s ease;
-
+  margin-right: 20px;
+  @media ${device.laptopB} {
+    width: 270px !important;
+    height: 330px !important;
+    margin-right: 40px;
+    margin-bottom: 20px;
+  }
+  @media ${device.laptop} {
+    margin-right: 20px;
+    margin-bottom: 0;
+  }
+  @media ${device.mobile} {
+    width: 90% !important;
+    height: 400px !important;
+    margin: 0 auto;
+  }
   &:active {
     transform: translateY(7px);
   }
@@ -78,27 +117,3 @@ const AnimeRating = styled.div`
     font-size: 15px;
   }
 `;
-
-interface AnimeItemProps {
-  item: AttributesAnime;
-  selectItem: () => void;
-}
-
-const AnimeItem: React.FC<AnimeItemProps> = ({ item, selectItem }) => {
-  return (
-    <Link to="info">
-      <AnimeItemWrapper onClick={() => selectItem()}>
-        <AnimeBlockout>
-          <h2>{item.titles.en || item.titles.en_jp}</h2>
-        </AnimeBlockout>
-        <AnimeRating>
-          <img src={starSvg} alt="star svg" />
-          <span>{item.averageRating}</span>
-        </AnimeRating>
-        <AnimeImage src={item.posterImage?.medium} />
-      </AnimeItemWrapper>
-    </Link>
-  );
-};
-
-export default AnimeItem;

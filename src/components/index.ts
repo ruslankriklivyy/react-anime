@@ -16,3 +16,6 @@ export { default as UsersLoader } from './LoaderContent/UsersLoader';
 export { default as AnimeInfoActions } from './Anime/AnimeInfoActions';
 export { default as AnimeAddBox } from './Anime/AnimeAddBox';
 export { default as AnimePageInfo } from './Anime/AnimePageInfo';
+export { default as AnimePaginator } from './Anime/AnimePaginator';
+export { default as AnimeSlider } from './Anime/AnimeSlider';
+export { default as BurgerMenu } from './BurgerMenu';

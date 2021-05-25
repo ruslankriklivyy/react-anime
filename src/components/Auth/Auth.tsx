@@ -6,97 +6,7 @@ import { loginUser } from '../../redux/users';
 import Login from './Login';
 
 import closeSvg from '../../assets/img/cancel.svg';
-
-const AuthBlock = styled.div`
-  position: absolute;
-  visibility: ${(props: IAuthBlock) => (props.show ? 'visible' : 'hidden')};
-  opacity: ${(props: IAuthBlock) => (props.show ? '1' : '0')};
-  transition: all 0.3s ease;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 900;
-  width: 500px;
-  min-height: 500px;
-  background-color: #212121;
-  padding: 20px;
-  border-radius: 20px;
-  h4 {
-    font-size: 43px;
-    letter-spacing: 1px;
-    text-align: center;
-    margin-bottom: 55px;
-  }
-  form {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    button {
-      width: 100%;
-      height: 55px;
-      background-color: #f1b32e;
-      border: none;
-      color: #fff;
-      font-size: 25px;
-      letter-spacing: 1px;
-      font-weight: 600;
-      border-radius: 10px;
-      cursor: pointer;
-      outline: none;
-    }
-    a {
-      color: #fff;
-      font-size: 22px;
-      position: absolute;
-      bottom: -60px;
-    }
-    input {
-      width: 100%;
-      height: 55px;
-      background: transparent;
-      border: 2px solid #f1b32e;
-      padding: 15px;
-      margin-bottom: 25px;
-      border-radius: 10px;
-      font-size: 18px;
-      font-weight: 500;
-      outline: none;
-      color: #fff;
-    }
-    span {
-      display: block;
-      text-align: left;
-      margin-right: auto;
-      margin-top: -15px;
-      margin-bottom: 25px;
-    }
-  }
-`;
-
-const AuthBlockWrapper = styled.div`
-  position: relative;
-  height: 100%;
-  width: 100%;
-  button {
-    display: block;
-    width: 20px;
-    height: 20px;
-    margin-left: auto;
-    border: none;
-    outline: none;
-    background-color: transparent;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    &:active {
-      transform: translateY(7px);
-    }
-    img {
-      width: 100%;
-      height: 100%;
-    }
-  }
-`;
+import { device } from '../../utils/deviceMedia';
 
 interface IAuthBlock {
   show: boolean;
@@ -165,3 +75,98 @@ const Auth: React.FC<IAuth> = ({ visibleAuth, blockOutRef, toggleVisibleAuth, on
 };
 
 export default Auth;
+
+const AuthBlock = styled.div`
+  position: absolute;
+  visibility: ${(props: IAuthBlock) => (props.show ? 'visible' : 'hidden')};
+  opacity: ${(props: IAuthBlock) => (props.show ? '1' : '0')};
+  transition: all 0.3s ease;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 900;
+  width: 500px;
+  min-height: 500px;
+  background-color: #212121;
+  padding: 20px;
+  border-radius: 20px;
+  h4 {
+    font-size: 43px;
+    letter-spacing: 1px;
+    text-align: center;
+    margin-bottom: 55px;
+  }
+  form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    button {
+      width: 100%;
+      height: 55px;
+      background-color: #f1b32e;
+      border: none;
+      color: #fff;
+      font-size: 25px;
+      letter-spacing: 1px;
+      font-weight: 600;
+      border-radius: 10px;
+      cursor: pointer;
+      outline: none;
+    }
+    a {
+      color: #fff;
+      font-size: 22px;
+      position: absolute;
+      bottom: -60px;
+    }
+    input {
+      width: 100%;
+      height: 55px;
+      background: transparent;
+      border: 2px solid #f1b32e;
+      padding: 15px;
+      margin-bottom: 25px;
+      border-radius: 10px;
+      font-size: 18px;
+      font-weight: 500;
+      outline: none;
+      color: #fff;
+    }
+    span {
+      display: block;
+      text-align: left;
+      margin-right: auto;
+      margin-top: -15px;
+      margin-bottom: 25px;
+    }
+  }
+  @media ${device.mobile} {
+    width: 90%;
+    min-height: 450px;
+  }
+`;
+
+const AuthBlockWrapper = styled.div`
+  position: relative;
+  height: 100%;
+  width: 100%;
+  button {
+    display: block;
+    width: 20px;
+    height: 20px;
+    margin-left: auto;
+    border: none;
+    outline: none;
+    background-color: transparent;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    &:active {
+      transform: translateY(7px);
+    }
+    img {
+      width: 100%;
+      height: 100%;
+    }
+  }
+`;

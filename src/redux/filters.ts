@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { filtersApi } from '../api/api';
-import { GenresResponse } from '../types/types';
+import { GenresResponse } from '../interfaces/interfaces';
 
 const initialState = {
   animeSearchValue: '' as string,
@@ -34,9 +34,5 @@ const filters = createSlice({
 });
 
 export default filters.reducer;
-export const {
-  setAnimeSearchValue,
-  setGenres,
-  setCurrentGenre,
-  setCurrentPageNumber,
-} = filters.actions;
+export const { setAnimeSearchValue, setGenres, setCurrentGenre, setCurrentPageNumber } =
+  filters.actions;

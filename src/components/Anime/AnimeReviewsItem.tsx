@@ -3,36 +3,11 @@ import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../redux';
 
-import { AnimeReviewsData } from '../../types/types';
+import { AnimeReviewsData } from '../../interfaces/interfaces';
 import { Box } from '../../pages/AnimePage';
 import { getReviewsAnime } from '../../redux/anime';
 
 import loverSvg from '../../assets/img/lover.svg';
-
-const AnimeInfoReviews = styled.p`
-  display: -webkit-box;
-  -webkit-line-clamp: 7;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-`;
-
-const AnimeInfoReviewsItem = styled.div`
-  margin-top: 30px;
-`;
-
-const AnimeInfoReviewsTop = styled.div`
-  display: inline-flex;
-  padding: 5px 15px;
-  border-top-left-radius: 15px;
-  border-top-right-radius: 15px;
-  align-items: center;
-  background-color: #212121;
-  img {
-    width: 23px;
-    height: 23px;
-    margin-left: 7px;
-  }
-`;
 
 const AnimeReviewsItem = () => {
   const dispatch = useDispatch();
@@ -59,3 +34,28 @@ const AnimeReviewsItem = () => {
 };
 
 export default AnimeReviewsItem;
+
+const AnimeInfoReviews = styled.p`
+  display: -webkit-box;
+  -webkit-line-clamp: 7;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+`;
+
+const AnimeInfoReviewsItem = styled.div`
+  margin-top: 30px;
+`;
+
+const AnimeInfoReviewsTop = styled.div`
+  display: inline-flex;
+  padding: 5px 15px;
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+  align-items: center;
+  background-color: #212121;
+  img {
+    width: 23px;
+    height: 23px;
+    margin-left: 7px;
+  }
+`;

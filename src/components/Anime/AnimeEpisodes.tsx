@@ -9,6 +9,81 @@ import { getEpisodesAnime } from '../../redux/anime';
 
 import episodesEmptyJpg from '../../assets/img/episodes-empty.jpg';
 
+const AnimeEpisodes = () => {
+  const dispatch = useDispatch();
+  const { episodesAnime, animeId } = useSelector((state: RootState) => state.anime);
+
+  const settings = {
+    dots: false,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 4,
+    slidesToScroll: 4,
+    responsive: [
+      {
+        breakpoint: 1200,
+        settings: {
+          slidesToShow: 3,
+          slidesToScroll: 3,
+        },
+      },
+      {
+        breakpoint: 992,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 2,
+        },
+      },
+      {
+        breakpoint: 600,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+        },
+      },
+    ],
+  };
+
+  React.useEffect(() => {
+    dispatch(getEpisodesAnime({ animeId }));
+  }, [dispatch, animeId]);
+
+  return (
+    <>
+      {episodesAnime?.data && (
+        <AnimeEpisodesWrapper>
+          <AnimeSeasonNumber>
+            Season {episodesAnime?.data[0].attributes.seasonNumber}
+          </AnimeSeasonNumber>
+          <Box slider>
+            <>
+              <Slider {...settings}>
+                {episodesAnime.data?.map(({ attributes }: any) => (
+                  <>
+                    <AnimeEpisode>
+                      <AnimeEpisodeBlockOut>
+                        <h2>{attributes.canonicalTitle || 'No information'}</h2>
+                      </AnimeEpisodeBlockOut>
+                      <AnimeEpisodeTime>{attributes.length} minutes</AnimeEpisodeTime>
+                      <img
+                        src={attributes.thumbnail?.original || episodesEmptyJpg}
+                        alt="episode img"
+                      />
+                    </AnimeEpisode>
+                    <AnimeEpisodeNumber>Episode {attributes.number}</AnimeEpisodeNumber>
+                  </>
+                ))}
+              </Slider>
+            </>
+          </Box>
+        </AnimeEpisodesWrapper>
+      )}
+    </>
+  );
+};
+
+export default React.memo(AnimeEpisodes);
+
 const AnimeEpisodeNumber = styled.div`
   position: absolute;
   bottom: 15px;
@@ -77,8 +152,6 @@ const AnimeEpisodesWrapper = styled.div`
   margin-top: 85px;
 `;
 
-const AnimeEpisodesSlider = styled.div``;
-
 const AnimeSeasonNumber = styled.span`
   padding: 21px 40px;
   font-size: 17px;
@@ -89,78 +162,3 @@ const AnimeSeasonNumber = styled.span`
   border-top-left-radius: 15px;
   border-top-right-radius: 15px;
 `;
-
-const AnimeEpisodes = () => {
-  const dispatch = useDispatch();
-  const { episodesAnime, animeId } = useSelector((state: RootState) => state.anime);
-
-  const settings = {
-    dots: false,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 4,
-    slidesToScroll: 4,
-    responsive: [
-      {
-        breakpoint: 1024,
-        settings: {
-          slidesToShow: 2,
-          slidesToScroll: 2,
-        },
-      },
-      {
-        breakpoint: 600,
-        settings: {
-          slidesToShow: 2,
-          slidesToScroll: 2,
-        },
-      },
-      {
-        breakpoint: 480,
-        settings: {
-          slidesToShow: 1,
-          slidesToScroll: 1,
-        },
-      },
-    ],
-  };
-
-  React.useEffect(() => {
-    dispatch(getEpisodesAnime({ animeId }));
-  }, [dispatch, animeId]);
-
-  return (
-    <>
-      {episodesAnime?.data && (
-        <AnimeEpisodesWrapper>
-          <AnimeSeasonNumber>
-            Season {episodesAnime?.data[0].attributes.seasonNumber}
-          </AnimeSeasonNumber>
-          <Box slider>
-            <AnimeEpisodesSlider>
-              <Slider {...settings}>
-                {episodesAnime.data?.map(({ attributes }) => (
-                  <>
-                    <AnimeEpisode>
-                      <AnimeEpisodeBlockOut>
-                        <h2>{attributes.canonicalTitle || 'No information'}</h2>
-                      </AnimeEpisodeBlockOut>
-                      <AnimeEpisodeTime>{attributes.length} minutes</AnimeEpisodeTime>
-                      <img
-                        src={attributes.thumbnail?.original || episodesEmptyJpg}
-                        alt="episode img"
-                      />
-                    </AnimeEpisode>
-                    <AnimeEpisodeNumber>Episode {attributes.number}</AnimeEpisodeNumber>
-                  </>
-                ))}
-              </Slider>
-            </AnimeEpisodesSlider>
-          </Box>
-        </AnimeEpisodesWrapper>
-      )}
-    </>
-  );
-};
-
-export default AnimeEpisodes;

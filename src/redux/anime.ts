@@ -6,7 +6,7 @@ import {
   AnimeOneResponse,
   AnimeReviewsResponse,
   Genres,
-} from '../types/types';
+} from '../interfaces/interfaces';
 
 const initialState = {
   animeItems: [] as Array<Anime>,

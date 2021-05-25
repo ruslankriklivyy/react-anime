@@ -1,10 +1,41 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import { device } from '../utils/deviceMedia';
 
-const CategoriesWrapper = styled.ul`
+const categoriesArr = ['Home', 'Anime List', 'Users'];
+
+interface ICategories {
+  toggleVisibleGenres: (e: React.MouseEvent) => void;
+  burgerMenu?: boolean;
+}
+
+const Categories: React.FC<ICategories> = ({ toggleVisibleGenres, burgerMenu }) => {
+  return (
+    <CategoriesWrapper burgerMenu={burgerMenu}>
+      {categoriesArr.map((name, index) => (
+        <li key={index}>
+          <Link to={`/${name.toLowerCase().split(' ').join('')}`}>{name}</Link>
+        </li>
+      ))}
+      <li>
+        <a href="/" className="open-genres" onClick={(e) => toggleVisibleGenres(e)}>
+          Genres
+        </a>
+      </li>
+    </CategoriesWrapper>
+  );
+};
+
+export default Categories;
+
+export const CategoriesWrapper = styled.ul`
   display: flex;
   align-items: center;
+  @media ${device.laptopL} {
+    /* display: none; */
+    ${(props: any) => (props.burgerMenu ? 'display: block;' : 'display: none;')}
+  }
   li {
     a {
       display: block;
@@ -49,28 +80,3 @@ const CategoriesWrapper = styled.ul`
     }
   }
 `;
-
-const categoriesArr = ['Home', 'Anime List', 'Users'];
-
-interface ICategories {
-  toggleVisibleGenres: (e: React.MouseEvent) => void;
-}
-
-const Categories: React.FC<ICategories> = ({ toggleVisibleGenres }) => {
-  return (
-    <CategoriesWrapper>
-      {categoriesArr.map((name, index) => (
-        <li key={index}>
-          <Link to={`/${name.toLowerCase().split(' ').join('')}`}>{name}</Link>
-        </li>
-      ))}
-      <li>
-        <a href="/" className="open-genres" onClick={(e) => toggleVisibleGenres(e)}>
-          Genres
-        </a>
-      </li>
-    </CategoriesWrapper>
-  );
-};
-
-export default Categories;

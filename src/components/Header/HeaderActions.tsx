@@ -10,6 +10,71 @@ import { setIsAuth } from '../../redux/users';
 import searchSvg from '../../assets/img/search.svg';
 import notificationSvg from '../../assets/img/bell.svg';
 import enterSvg from '../../assets/img/enter.svg';
+import { device } from '../../utils/deviceMedia';
+
+interface IHeaderSearchInput {
+  show: boolean;
+}
+
+interface IHeaderActions {
+  toggleVisibleAuth: () => void;
+  burgerMenu?: boolean;
+}
+
+const HeaderActions: React.FC<IHeaderActions> = ({ toggleVisibleAuth, burgerMenu }) => {
+  const dispatch = useDispatch();
+  const animeSearchValue = useSelector((state: RootState) => state.filters.animeSearchValue);
+  const isAuth = useSelector((state: RootState) => state.users.isAuth);
+
+  const [visibleInput, setVisibleInput] = React.useState(false);
+
+  const [cookies, setCookie, removeCookie] = useCookies(['token']);
+
+  const handleInputValue = (value: string) => {
+    dispatch(setAnimeSearchValue(value));
+  };
+
+  const logout = () => {
+    removeCookie('userInfo');
+    removeCookie('token');
+    dispatch(setIsAuth(false));
+  };
+
+  return (
+    <HeaderActionWrapper burgerMenu={burgerMenu}>
+      <HeaderSearchInput
+        show={visibleInput}
+        placeholder="Search anime"
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleInputValue(e.target.value)}
+        value={animeSearchValue}
+      />
+      <HeaderAction onClick={() => setVisibleInput(!visibleInput)}>
+        <img src={searchSvg} alt="search svg" />
+      </HeaderAction>
+      <HeaderAction>
+        <img src={notificationSvg} alt="notification svg" />
+      </HeaderAction>
+      {!isAuth ? (
+        <HeaderAction onClick={() => toggleVisibleAuth()}>
+          <img src={enterSvg} alt="enter svg" />
+        </HeaderAction>
+      ) : (
+        <UserInfo>
+          <UserEmail>{cookies?.userInfo?.email}</UserEmail>
+          <UserLogout onClick={() => logout()}>Logout</UserLogout>
+        </UserInfo>
+      )}
+    </HeaderActionWrapper>
+  );
+};
+
+export default HeaderActions;
+
+export const HeaderActionWrapper = styled.div`
+  @media ${device.laptopL} {
+    ${(props: any) => (props.burgerMenu ? 'display: block;' : 'display: none;')};
+  }
+`;
 
 const HeaderAction = styled.button`
   position: relative;
@@ -19,6 +84,7 @@ const HeaderAction = styled.button`
   cursor: pointer;
   margin: 0 12px;
   transition: all 0.2s ease;
+
   &:active {
     transform: translateY(5px);
     opacity: 0.8;
@@ -80,60 +146,3 @@ const UserLogout = styled.button`
     transform: translateY(3px);
   }
 `;
-
-interface IHeaderSearchInput {
-  show: boolean;
-}
-
-interface IHeaderActions {
-  toggleVisibleAuth: () => void;
-}
-
-const HeaderActions: React.FC<IHeaderActions> = ({ toggleVisibleAuth }) => {
-  const dispatch = useDispatch();
-  const animeSearchValue = useSelector((state: RootState) => state.filters.animeSearchValue);
-  const isAuth = useSelector((state: RootState) => state.users.isAuth);
-
-  const [visibleInput, setVisibleInput] = React.useState(false);
-
-  const [cookies, setCookie, removeCookie] = useCookies(['token']);
-
-  const handleInputValue = (value: string) => {
-    dispatch(setAnimeSearchValue(value));
-  };
-
-  const logout = () => {
-    removeCookie('userInfo');
-    removeCookie('token');
-    dispatch(setIsAuth(false));
-  };
-
-  return (
-    <>
-      <HeaderSearchInput
-        show={visibleInput}
-        placeholder="Search anime"
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleInputValue(e.target.value)}
-        value={animeSearchValue}
-      />
-      <HeaderAction onClick={() => setVisibleInput(!visibleInput)}>
-        <img src={searchSvg} alt="search svg" />
-      </HeaderAction>
-      <HeaderAction>
-        <img src={notificationSvg} alt="notification svg" />
-      </HeaderAction>
-      {!isAuth ? (
-        <HeaderAction onClick={() => toggleVisibleAuth()}>
-          <img src={enterSvg} alt="enter svg" />
-        </HeaderAction>
-      ) : (
-        <UserInfo>
-          <UserEmail>{cookies?.userInfo?.email}</UserEmail>
-          <UserLogout onClick={() => logout()}>Logout</UserLogout>
-        </UserInfo>
-      )}
-    </>
-  );
-};
-
-export default HeaderActions;

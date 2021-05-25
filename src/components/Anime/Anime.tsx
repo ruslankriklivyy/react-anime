@@ -1,24 +1,64 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
-import Slider from 'react-slick';
 
 import { RootState } from '../../redux';
-import { getAnime, getFavoritesAnime, setAnimeId } from '../../redux/anime';
+import { getFavoritesAnime, setAnimeId } from '../../redux/anime';
 import { Container } from '../../App';
-import { AnimeItem, AnimeItemLoader, Button } from '..';
+import { AnimeItem, AnimeItemLoader, AnimeSlider } from '..';
+import { AnimePaginator } from '../../components';
+import { device } from '../../utils/deviceMedia';
+import { AnimeItemWrapper } from './AnimeItem';
+import { ButtonWrapper } from '../Button';
 
-import arrowSvg from '../../assets/img/arrow.svg';
-import { setCurrentPageNumber } from '../../redux/filters';
-import scrollTop from '../../utils/scrollTop';
+const Anime = () => {
+  const dispatch = useDispatch();
+  const { animeFavoritesItems, isLoading } = useSelector((state: RootState) => state.anime);
+  const { currentGenre, animeSearchValue } = useSelector((state: RootState) => state.filters);
+  let { currentPageNumber } = useSelector((state: RootState) => state.filters);
+
+  const onSelectAnime = (id: number) => {
+    dispatch(setAnimeId(id));
+  };
+
+  React.useEffect(() => {
+    dispatch(getFavoritesAnime({ animeSearchValue, currentGenre, currentPageNumber }));
+  }, [dispatch, animeSearchValue, currentGenre, currentPageNumber]);
+
+  return (
+    <AnimeWrapper>
+      <Container>
+        <TitleMain>Top Rating</TitleMain>
+        <AnimeBox>
+          <AnimeSlider onSelectAnime={onSelectAnime} />
+        </AnimeBox>
+        <TitleMain>{currentGenre ?? 'All Anime'}</TitleMain>
+        <AnimeAllBox>
+          {isLoading
+            ? animeFavoritesItems?.map((item) => (
+                <AnimeItem
+                  key={item.id}
+                  item={item.attributes}
+                  selectItem={() => onSelectAnime(Number(item.id))}
+                />
+              ))
+            : Array(12)
+                .fill(0)
+                .map((_, index) => <AnimeItemLoader key={index} />)}
+        </AnimeAllBox>
+        <AnimePaginator />
+      </Container>
+    </AnimeWrapper>
+  );
+};
+
+export default Anime;
 
 const AnimeWrapper = styled.section`
   position: relative;
   padding-top: 60px;
-  margin-bottom: 40px;
-  .slick-list {
-    overflow: unset;
-  }
+  padding-bottom: 20px;
+
   .slick-arrow {
     display: block;
     position: absolute;
@@ -39,6 +79,25 @@ const AnimeWrapper = styled.section`
   .slick-slide > div {
     width: 300px !important;
     height: 360px !important;
+  }
+  @media ${device.mobile} {
+    .slick-slide > div {
+      width: 100% !important;
+      height: 400px !important;
+    }
+    ${ButtonWrapper} {
+      padding: 5px 12px;
+      margin: 0 20px;
+      span {
+        font-size: 0;
+        padding: 0;
+      }
+      img {
+        width: 30px;
+        height: 30px;
+        margin: 0 auto;
+      }
+    }
   }
 `;
 
@@ -71,133 +130,16 @@ const AnimeAllBox = styled.div`
   align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
+  @media ${device.laptopB} {
+    justify-content: flex-start;
+  }
+  @media ${device.mobile} {
+    justify-content: center;
+  }
   svg {
     margin-bottom: 30px;
   }
   a {
-    margin-bottom: 30px;
+    margin-bottom: 20px;
   }
 `;
-
-const AnimePaginator = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-`;
-
-const Anime = () => {
-  const dispatch = useDispatch();
-  const { animeItems, animeFavoritesItems, isLoading } = useSelector(
-    (state: RootState) => state.anime,
-  );
-  const { currentGenre, animeSearchValue } = useSelector((state: RootState) => state.filters);
-
-  let { currentPageNumber } = useSelector((state: RootState) => state.filters);
-
-  const onSelectAnime = (id: number) => {
-    dispatch(setAnimeId(id));
-  };
-
-  const onPlusPageNumber = () => {
-    dispatch(setCurrentPageNumber(currentPageNumber + 12));
-    scrollTop();
-  };
-
-  const onMinusPageNumber = () => {
-    if (currentPageNumber !== 0) {
-      dispatch(setCurrentPageNumber(currentPageNumber - 12));
-    }
-    scrollTop();
-  };
-
-  const settings = {
-    dots: false,
-    infinite: true,
-    autoPlay: true,
-    speed: 500,
-    slidesToShow: 4,
-    slidesToScroll: 4,
-    centerMode: true,
-    centerPadding: '70px',
-    responsive: [
-      {
-        breakpoint: 1024,
-        settings: {
-          slidesToShow: 2,
-          slidesToScroll: 3,
-        },
-      },
-      {
-        breakpoint: 600,
-        settings: {
-          slidesToShow: 1,
-          slidesToScroll: 2,
-        },
-      },
-      {
-        breakpoint: 480,
-        settings: {
-          slidesToShow: 1,
-          slidesToScroll: 1,
-        },
-      },
-    ],
-  };
-
-  React.useEffect(() => {
-    dispatch(getAnime());
-  }, [dispatch]);
-
-  React.useEffect(() => {
-    dispatch(getFavoritesAnime({ animeSearchValue, currentGenre, currentPageNumber }));
-  }, [dispatch, animeSearchValue, currentGenre, currentPageNumber]);
-
-  return (
-    <AnimeWrapper>
-      <Container>
-        <TitleMain>Top Rating</TitleMain>
-        <AnimeBox>
-          <Slider {...settings}>
-            {isLoading
-              ? animeItems?.map((item) => (
-                  <AnimeItem
-                    key={item.id}
-                    item={item.attributes}
-                    selectItem={() => onSelectAnime(Number(item.id))}
-                  />
-                ))
-              : Array(12)
-                  .fill(0)
-                  .map((_, index) => <AnimeItemLoader key={index} />)}
-          </Slider>
-        </AnimeBox>
-        <TitleMain>{currentGenre ?? 'All Anime'}</TitleMain>
-        <AnimeAllBox>
-          {isLoading
-            ? animeFavoritesItems?.map((item) => (
-                <AnimeItem
-                  key={item.id}
-                  item={item.attributes}
-                  selectItem={() => onSelectAnime(Number(item.id))}
-                />
-              ))
-            : Array(12)
-                .fill(0)
-                .map((_, index) => <AnimeItemLoader key={index} />)}
-        </AnimeAllBox>
-        <AnimePaginator>
-          {currentPageNumber > 1 && (
-            <Button onClick={() => onMinusPageNumber()} paginator previous>
-              <img src={arrowSvg} alt="arrow svg" /> <span>Previous Page</span>
-            </Button>
-          )}
-          <Button onClick={() => onPlusPageNumber()} paginator>
-            <span>Next Page</span> <img src={arrowSvg} alt="arrow svg" />
-          </Button>
-        </AnimePaginator>
-      </Container>
-    </AnimeWrapper>
-  );
-};
-
-export default Anime;

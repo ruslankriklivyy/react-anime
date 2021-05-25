@@ -3,47 +3,6 @@ import styled from 'styled-components';
 
 import closeSvg from '../../assets/img/close.svg';
 
-const AnimeTrailerWrapper = styled.div`
-  position: relative;
-  padding-bottom: ${(props: AnimeTrailerProps) => (props.show ? '56.25%' : '0')};
-  border-radius: 30px;
-  height: 0;
-  overflow: hidden;
-  z-index: 400;
-  margin-bottom: 40px;
-  transition: all 0.3s ease;
-
-  button {
-    width: 40px;
-    height: 40px;
-    top: 80px;
-    right: -4px;
-    position: absolute;
-    z-index: 600;
-    background-color: transparent;
-    border: none;
-    cursor: pointer;
-    overflow: hidden;
-    transition: all 0.3s ease;
-    &:active {
-      transform: translateY(7px);
-    }
-    img {
-      width: 40px;
-      height: 40px;
-    }
-  }
-  iframe {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    border-width: 0;
-    outline-width: 0;
-  }
-`;
-
 interface AnimeTrailerProps {
   show: boolean;
 }
@@ -106,4 +65,45 @@ const AnimeTrailer: React.FC<IAnimeTrailer> = ({
   );
 };
 
-export default AnimeTrailer;
+export default React.memo(AnimeTrailer);
+
+const AnimeTrailerWrapper = styled.div`
+  position: relative;
+  padding-bottom: ${(props: AnimeTrailerProps) => (props.show ? '56.25%' : '0')};
+  border-radius: 30px;
+  height: 0;
+  overflow: hidden;
+  z-index: 400;
+  margin-bottom: 40px;
+  transition: all 0.3s ease;
+
+  button {
+    width: 40px;
+    height: 40px;
+    top: 80px;
+    right: -4px;
+    position: absolute;
+    z-index: 600;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    &:active {
+      transform: translateY(7px);
+    }
+    img {
+      width: 40px;
+      height: 40px;
+    }
+  }
+  iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-width: 0;
+    outline-width: 0;
+  }
+`;

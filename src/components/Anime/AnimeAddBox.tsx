@@ -3,17 +3,63 @@ import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 
 import removeSvg from '../../assets/img/cancel.svg';
-import { AttributesAnime } from '../../types/types';
+import { AttributesAnime } from '../..//interfaces/interfaces';
 import { RootState } from '../../redux';
 import { addToList } from '../../redux/list';
+import { device } from '../../utils/deviceMedia';
 
-const AnimeInfoBottom = styled.div`
-  display: flex;
-  align-items: center;
-  button {
-    margin-right: 10px;
-  }
-`;
+const typesList = ['Plan to watch', 'Checked', 'Liked', "Didn't like it."];
+
+interface IBlockOutInfo {
+  show: boolean;
+}
+
+interface IAnimeAddBox {
+  closeAddBlock: () => void;
+  visibleAddBlock: boolean;
+}
+
+const AnimeAddBox: React.FC<IAnimeAddBox> = ({ closeAddBlock, visibleAddBlock }) => {
+  const dispatch = useDispatch();
+  const { chosenAnime } = useSelector((state: RootState) => state.anime);
+
+  const addAnimeToList = (type: string, obj: AttributesAnime) => {
+    const newObj = {
+      id: Number(chosenAnime.data.id),
+      titles: obj.titles,
+      startDate: obj.startDate,
+      synopsis: obj.synopsis,
+      averageRating: obj.averageRating,
+      posterImage: obj.posterImage,
+      type,
+    };
+
+    dispatch(
+      addToList({
+        category: type.split(' ').join('_'),
+        item: newObj,
+      }),
+    );
+
+    closeAddBlock();
+  };
+
+  return (
+    <AnimeAddedBox show={visibleAddBlock}>
+      <span onClick={() => closeAddBlock()}>
+        <img src={removeSvg} alt="remove svg" />
+      </span>
+      <h4>Add to:</h4>
+      {typesList.map((name, index) => (
+        <button key={index} onClick={() => addAnimeToList(name, chosenAnime.data.attributes)}>
+          {name}
+        </button>
+      ))}
+    </AnimeAddedBox>
+  );
+};
+
+export default React.memo(AnimeAddBox);
 
 const AnimeAddedBox = styled.div`
   ${(props: IBlockOutInfo) => (props.show ? 'visibility: visible' : 'visibility: hidden')};
@@ -32,6 +78,7 @@ const AnimeAddedBox = styled.div`
   padding: 20px;
   border-radius: 10px;
   transition: all 0.2s ease;
+
   span {
     display: block;
     margin-left: auto;
@@ -70,57 +117,13 @@ const AnimeAddedBox = styled.div`
       background-color: #ffb400;
     }
   }
+  @media ${device.mobile} {
+    width: 90%;
+    h4 {
+      font-size: 28px;
+    }
+    button {
+      font-size: 20px;
+    }
+  }
 `;
-
-const typesList = ['Plan to watch', 'Checked', 'Liked', "Didn't like it."];
-
-interface IBlockOutInfo {
-  show: boolean;
-}
-
-interface IAnimeAddBox {
-  closeAddBlock: () => void;
-  visibleAddBlock: boolean;
-}
-
-const AnimeAddBox: React.FC<IAnimeAddBox> = ({ closeAddBlock, visibleAddBlock }) => {
-  const dispatch = useDispatch();
-  const { chosenAnime } = useSelector((state: RootState) => state.anime);
-
-  const addAnimeToList = (type: string, obj: AttributesAnime) => {
-    const newObj = {
-      id: chosenAnime.data.id,
-      titles: obj.titles,
-      startDate: obj.startDate,
-      synopsis: obj.synopsis,
-      averageRating: obj.averageRating,
-      posterImage: obj.posterImage,
-      type,
-    };
-
-    dispatch(
-      addToList({
-        category: type.split(' ').join('_'),
-        item: newObj,
-      }),
-    );
-
-    closeAddBlock();
-  };
-
-  return (
-    <AnimeAddedBox show={visibleAddBlock}>
-      <span onClick={() => closeAddBlock()}>
-        <img src={removeSvg} alt="remove svg" />
-      </span>
-      <h4>Add to:</h4>
-      {typesList.map((name, index) => (
-        <button key={index} onClick={() => addAnimeToList(name, chosenAnime.data.attributes)}>
-          {name}
-        </button>
-      ))}
-    </AnimeAddedBox>
-  );
-};
-
-export default AnimeAddBox;

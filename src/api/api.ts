@@ -8,7 +8,7 @@ import {
   GenresResponse,
   Token,
   UsersRespones,
-} from '../types/types';
+} from '../interfaces/interfaces';
 
 const token = JSON.parse(localStorage.getItem('token') || 'null');
 
@@ -39,7 +39,7 @@ export const animeApi = {
   ): Promise<Array<Anime>> {
     return instance
       .get(
-        `anime?sort=-favoritesCount&page[limit]=12${
+        `anime?sort=-favoritesCount&page[limit]=20${
           animeSearchValue !== '' ? `&filter[text]=${animeSearchValue}` : ''
         }${
           currentGenre !== null ? `&filter[genres]=${currentGenre}` : ''
