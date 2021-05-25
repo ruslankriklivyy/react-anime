@@ -7,6 +7,7 @@ import { AttributesAnime } from '../..//interfaces/interfaces';
 import { RootState } from '../../redux';
 import { addToList } from '../../redux/list';
 import { device } from '../../utils/deviceMedia';
+import scrollTop from '../../utils/scrollTop';
 
 const typesList = ['Plan to watch', 'Checked', 'Liked', "Didn't like it."];
 

@@ -13,13 +13,10 @@ import { device } from '../../utils/deviceMedia';
 
 interface IAnimeInfoActions {
   setVisibleTrailer: (visible: boolean) => void;
-  setVisibleAddBlock: (visible: boolean) => void;
+  openAddBlock: () => void;
 }
 
-const AnimeInfoActions: React.FC<IAnimeInfoActions> = ({
-  setVisibleTrailer,
-  setVisibleAddBlock,
-}) => {
+const AnimeInfoActions: React.FC<IAnimeInfoActions> = ({ setVisibleTrailer, openAddBlock }) => {
   const dispatch = useDispatch();
   const { addedItemsIds } = useSelector((state: RootState) => state.list);
   const { chosenAnime } = useSelector((state: RootState) => state.anime);
@@ -41,7 +38,7 @@ const AnimeInfoActions: React.FC<IAnimeInfoActions> = ({
     <AnimeInfoBottom>
       <Button onClick={() => openTrailer()}>Watch Trailer</Button>
       {!addedItemsIds.includes(Number(chosenAnime.data.id)) ? (
-        <AnimeButtonPlus onClick={() => setVisibleAddBlock(true)}>
+        <AnimeButtonPlus onClick={() => openAddBlock()}>
           <img src={plusSvg} alt="plus svg" />
         </AnimeButtonPlus>
       ) : (

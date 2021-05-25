@@ -31,6 +31,11 @@ const AnimePage = () => {
   const [visibleAddBlock, setVisibleAddBlock] = React.useState(false);
   const blockOutRef = React.useRef<HTMLDivElement>(null);
 
+  const openAddBlock = () => {
+    scrollTop();
+    setVisibleAddBlock(true);
+  };
+
   const closeAddBlock = React.useCallback(() => {
     setVisibleAddBlock(false);
   }, []);
@@ -89,10 +94,7 @@ const AnimePage = () => {
         />
         <AnimeInfoBox>
           <AnimeAddBox closeAddBlock={closeAddBlock} visibleAddBlock={visibleAddBlock} />
-          <AnimePageInfo
-            setVisibleAddBlock={setVisibleAddBlock}
-            setVisibleTrailer={setVisibleTrailer}
-          />
+          <AnimePageInfo openAddBlock={openAddBlock} setVisibleTrailer={setVisibleTrailer} />
         </AnimeInfoBox>
         <AnimeEpisodes />
         <AnimeReviewsItem />

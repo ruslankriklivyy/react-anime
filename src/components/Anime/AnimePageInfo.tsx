@@ -12,11 +12,11 @@ import { getGenresAnime, getOneAnime, setAnimeId } from '../../redux/anime';
 import { device } from '../../utils/deviceMedia';
 
 interface IAnimePageInfo {
-  setVisibleAddBlock: (visible: boolean) => void;
+  openAddBlock: () => void;
   setVisibleTrailer: (visible: boolean) => void;
 }
 
-const AnimePageInfo: React.FC<IAnimePageInfo> = ({ setVisibleAddBlock, setVisibleTrailer }) => {
+const AnimePageInfo: React.FC<IAnimePageInfo> = ({ openAddBlock, setVisibleTrailer }) => {
   const dispatch = useDispatch();
   const { chosenAnime, animeId, genresAnime, isLoadingInfo } = useSelector(
     (state: RootState) => state.anime,
@@ -68,10 +68,7 @@ const AnimePageInfo: React.FC<IAnimePageInfo> = ({ setVisibleAddBlock, setVisibl
                 <AnimeInfoGenre key={genre.id}>{genre.attributes.name}</AnimeInfoGenre>
               ))}
             </AnimeInfoGenres>
-            <AnimeInfoActions
-              setVisibleAddBlock={setVisibleAddBlock}
-              setVisibleTrailer={setVisibleTrailer}
-            />
+            <AnimeInfoActions openAddBlock={openAddBlock} setVisibleTrailer={setVisibleTrailer} />
           </AnimeInfoMain>
         </AnimePageInfoWrapper>
       ) : (
