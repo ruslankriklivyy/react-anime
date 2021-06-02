@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 
@@ -61,16 +62,19 @@ const Auth: React.FC<IAuth> = ({ visibleAuth, blockOutRef, toggleVisibleAuth, on
       : document.querySelector<HTMLElement>('body')?.setAttribute('style', 'overflow: auto');
   }, [visibleAuth]);
 
-  return (
-    <AuthBlock show={visibleAuth}>
-      <AuthBlockWrapper>
-        <button onClick={() => toggleVisibleAuth()}>
-          <img src={closeSvg} alt="close svg" />
-        </button>
-        <h4>Login</h4>
-        <Login onSendUser={onSendUser} toggleVisibleAuth={toggleVisibleAuth} />
-      </AuthBlockWrapper>
-    </AuthBlock>
+  return ReactDOM.createPortal(
+    <>
+      <AuthBlock show={visibleAuth}>
+        <AuthBlockWrapper>
+          <button onClick={() => toggleVisibleAuth()}>
+            <img src={closeSvg} alt="close svg" />
+          </button>
+          <h4>Login</h4>
+          <Login onSendUser={onSendUser} toggleVisibleAuth={toggleVisibleAuth} />
+        </AuthBlockWrapper>
+      </AuthBlock>
+    </>,
+    document.getElementById('portal')!,
   );
 };
 
