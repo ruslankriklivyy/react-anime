@@ -68,6 +68,7 @@ const list = createSlice({
 
       localStorage.setItem('list', JSON.stringify(state.listItems));
       localStorage.setItem('listTypeById', JSON.stringify(state.listTypeById));
+      localStorage.setItem('addedItemsListIds', JSON.stringify(state.addedItemsIds));
     },
 
     removeTypeFromList: (state, action: PayloadAction<string>) => {
