@@ -1,4 +1,4 @@
-## React Anime 👚
+## React Anime 
 
 ▶[Live demo](https://react-anime-xi.vercel.app/)
 
