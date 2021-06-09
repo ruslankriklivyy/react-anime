@@ -12,4 +12,5 @@
 - Redux Toolkit
 - react-cookie
 - formik
+- react-slick
 - styled-components
