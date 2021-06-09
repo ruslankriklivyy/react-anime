@@ -7,7 +7,6 @@ import { AttributesAnime } from '../..//interfaces/interfaces';
 import { RootState } from '../../redux';
 import { addToList } from '../../redux/list';
 import { device } from '../../utils/deviceMedia';
-import scrollTop from '../../utils/scrollTop';
 
 const typesList = ['Plan to watch', 'Checked', 'Liked', "Didn't like it."];
 
@@ -65,7 +64,7 @@ export default React.memo(AnimeAddBox);
 const AnimeAddedBox = styled.div`
   ${(props: IBlockOutInfo) => (props.show ? 'visibility: visible' : 'visibility: hidden')};
   ${(props: IBlockOutInfo) => (props.show ? 'opacity: 1' : 'opacity: 0')};
-  position: absolute;
+  position: fixed;
   top: 50%;
   left: 50%;
   width: 400px;
