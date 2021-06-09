@@ -8,16 +8,18 @@ import { Container } from '../../App';
 import { AnimeItem, AnimeItemLoader, AnimeSlider } from '..';
 import { AnimePaginator } from '../../components';
 import { device } from '../../utils/deviceMedia';
-import { AnimeItemWrapper } from './AnimeItem';
 import { ButtonWrapper } from '../Button';
+import { useHistory } from 'react-router';
 
 const Anime = () => {
   const dispatch = useDispatch();
   const { animeFavoritesItems, isLoading } = useSelector((state: RootState) => state.anime);
   const { currentGenre, animeSearchValue } = useSelector((state: RootState) => state.filters);
   let { currentPageNumber } = useSelector((state: RootState) => state.filters);
+  let history = useHistory();
 
   const onSelectAnime = (id: number) => {
+    history.push(`/anime/${id}`);
     dispatch(setAnimeId(id));
   };
 

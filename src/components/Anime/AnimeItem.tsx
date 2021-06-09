@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
 
 import { AttributesAnime } from '../../interfaces/interfaces';
 import starSvg from '../../assets/img/star.svg';
@@ -13,8 +12,8 @@ interface AnimeItemProps {
 
 const AnimeItem: React.FC<AnimeItemProps> = ({ item, selectItem }) => {
   return (
-    <Link to="info">
-      <AnimeItemWrapper onClick={() => selectItem()}>
+    <>
+      <AnimeItemWrapper onClick={selectItem}>
         <AnimeBlockout>
           <h2>{item.titles.en || item.titles.en_jp}</h2>
         </AnimeBlockout>
@@ -24,7 +23,7 @@ const AnimeItem: React.FC<AnimeItemProps> = ({ item, selectItem }) => {
         </AnimeRating>
         <AnimeImage src={item.posterImage?.medium} />
       </AnimeItemWrapper>
-    </Link>
+    </>
   );
 };
 

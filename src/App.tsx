@@ -15,7 +15,7 @@ function App() {
     <div className="app">
       <Header />
       <Route exact path={['/', '/home']} component={Anime} />
-      <Route path="/info" component={AnimeInfo} />
+      <Route path={`/anime/:id`} component={AnimeInfo} />
       <Route path="/animelist" component={AnimeList} />
       <Route path="/users" component={Users} />
     </div>

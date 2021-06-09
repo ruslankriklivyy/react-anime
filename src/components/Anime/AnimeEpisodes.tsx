@@ -58,20 +58,20 @@ const AnimeEpisodes = () => {
           <Box slider>
             <>
               <Slider {...settings}>
-                {episodesAnime.data?.map(({ attributes }: any) => (
-                  <>
+                {episodesAnime.data?.map((item) => (
+                  <div key={item.id}>
                     <AnimeEpisode>
                       <AnimeEpisodeBlockOut>
-                        <h2>{attributes.canonicalTitle || 'No information'}</h2>
+                        <h2>{item.attributes.canonicalTitle || 'No information'}</h2>
                       </AnimeEpisodeBlockOut>
-                      <AnimeEpisodeTime>{attributes.length} minutes</AnimeEpisodeTime>
+                      <AnimeEpisodeTime>{item.attributes.length} minutes</AnimeEpisodeTime>
                       <img
-                        src={attributes.thumbnail?.original || episodesEmptyJpg}
+                        src={item.attributes.thumbnail?.original || episodesEmptyJpg}
                         alt="episode img"
                       />
                     </AnimeEpisode>
-                    <AnimeEpisodeNumber>Episode {attributes.number}</AnimeEpisodeNumber>
-                  </>
+                    <AnimeEpisodeNumber>Episode {item.attributes.number}</AnimeEpisodeNumber>
+                  </div>
                 ))}
               </Slider>
             </>

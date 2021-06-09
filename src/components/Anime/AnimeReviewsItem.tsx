@@ -35,7 +35,7 @@ const AnimeReviewsItem = () => {
 
 export default AnimeReviewsItem;
 
-const AnimeInfoReviews = styled.p`
+const AnimeInfoReviews = styled.div`
   display: -webkit-box;
   -webkit-line-clamp: 7;
   -webkit-box-orient: vertical;
