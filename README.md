@@ -1,7 +1,5 @@
 ## React Anime
 
-## React Anime
-
 ▶[Live demo](https://react-anime-xi.vercel.app/)
 
 ![Header](https://github.com/ruslankriklivyy/react-anime/blob/main/public/reactAnime.gif)
