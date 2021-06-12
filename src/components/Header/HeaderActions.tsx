@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 import { useCookies } from 'react-cookie';
+import { useDebouncedCallback } from 'use-debounce';
 
 import { RootState } from '../../redux';
 import { setAnimeSearchValue } from '../../redux/filters';
@@ -30,9 +31,9 @@ const HeaderActions: React.FC<IHeaderActions> = ({ toggleVisibleAuth, burgerMenu
 
   const [cookies, setCookie, removeCookie] = useCookies(['token']);
 
-  const handleInputValue = (value: string) => {
+  const handleInputValue = useDebouncedCallback((value: string) => {
     dispatch(setAnimeSearchValue(value));
-  };
+  }, 100);
 
   const logout = () => {
     removeCookie('userInfo');

@@ -70,6 +70,7 @@ export const AnimeItemWrapper = styled.div`
   cursor: pointer;
   transition: all 0.3s ease;
   margin-right: 20px;
+  margin-bottom: 20px;
   @media ${device.laptopB} {
     width: 270px !important;
     height: 330px !important;
