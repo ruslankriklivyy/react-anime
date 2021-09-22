@@ -19,7 +19,10 @@ interface IAnimeAddBox {
   visibleAddBlock: boolean;
 }
 
-const AnimeAddBox: React.FC<IAnimeAddBox> = ({ closeAddBlock, visibleAddBlock }) => {
+export const AnimeAddBox: React.FC<IAnimeAddBox> = React.memo(function AnimeAddBox({
+  closeAddBlock,
+  visibleAddBlock,
+}) {
   const dispatch = useDispatch();
   const { chosenAnime } = useSelector((state: RootState) => state.anime);
 
@@ -57,9 +60,7 @@ const AnimeAddBox: React.FC<IAnimeAddBox> = ({ closeAddBlock, visibleAddBlock })
       ))}
     </AnimeAddedBox>
   );
-};
-
-export default React.memo(AnimeAddBox);
+});
 
 const AnimeAddedBox = styled.div`
   ${(props: IBlockOutInfo) => (props.show ? 'visibility: visible' : 'visibility: hidden')};

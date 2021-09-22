@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import styled from 'styled-components';
 
 import { Container } from '../App';
-import { AnimeItem } from '../components';
+import { AnimeItem } from '../components/Anime/AnimeItem';
 import { RootState } from '../redux';
 import { setAnimeId } from '../redux/anime';
 import { removeItemFromList, removeTypeFromList, setTypeList } from '../redux/list';

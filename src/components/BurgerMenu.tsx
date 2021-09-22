@@ -1,11 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Categories, HeaderActions } from '.';
 
 import closeSvg from '../assets/img/cancel.svg';
 import { device } from '../utils/deviceMedia';
-import { CategoriesWrapper } from './Categories';
-import { HeaderActionWrapper } from './Header/HeaderActions';
+import { Categories, CategoriesWrapper } from './Categories';
+import { HeaderActions, HeaderActionWrapper } from './Header/HeaderActions';
 
 interface IBurgerMenu {
   toggleVisibleGenres: (e: React.MouseEvent) => void;
@@ -13,7 +12,7 @@ interface IBurgerMenu {
   onCloseBurgerMenu: () => void;
 }
 
-const BurgerMenu: React.FC<IBurgerMenu> = ({
+export const BurgerMenu: React.FC<IBurgerMenu> = ({
   toggleVisibleGenres,
   toggleVisibleAuth,
   onCloseBurgerMenu,
@@ -34,8 +33,6 @@ const BurgerMenu: React.FC<IBurgerMenu> = ({
     </BurgerMenuWrapper>
   );
 };
-
-export default BurgerMenu;
 
 const BurgerMenuWrapper = styled.div`
   position: fixed;

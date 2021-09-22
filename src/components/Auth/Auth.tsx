@@ -4,10 +4,10 @@ import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 
 import { loginUser } from '../../redux/users';
-import Login from './Login';
 
 import closeSvg from '../../assets/img/cancel.svg';
 import { device } from '../../utils/deviceMedia';
+import { Login } from './Login';
 
 interface IAuthBlock {
   show: boolean;
@@ -20,7 +20,12 @@ interface IAuth {
   onCloseAuth: () => void;
 }
 
-const Auth: React.FC<IAuth> = ({ visibleAuth, blockOutRef, toggleVisibleAuth, onCloseAuth }) => {
+export const Auth: React.FC<IAuth> = ({
+  visibleAuth,
+  blockOutRef,
+  toggleVisibleAuth,
+  onCloseAuth,
+}) => {
   const dispatch = useDispatch();
 
   const onSendUser = (email: string, password: string) => {
@@ -77,8 +82,6 @@ const Auth: React.FC<IAuth> = ({ visibleAuth, blockOutRef, toggleVisibleAuth, on
     document.getElementById('portal')!,
   );
 };
-
-export default Auth;
 
 const AuthBlock = styled.div`
   position: absolute;

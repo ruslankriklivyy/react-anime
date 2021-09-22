@@ -1,7 +1,7 @@
 import React from 'react';
 import ContentLoader from 'react-content-loader';
 
-const UsersLoader = (props: any) => (
+export const UsersLoader = (props: any) => (
   <ContentLoader
     speed={2}
     width={240}
@@ -14,5 +14,3 @@ const UsersLoader = (props: any) => (
     <rect x="8" y="2" rx="15" ry="15" width="180" height="220" />
   </ContentLoader>
 );
-
-export default UsersLoader;

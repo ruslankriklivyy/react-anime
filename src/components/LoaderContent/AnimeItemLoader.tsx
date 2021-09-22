@@ -1,7 +1,7 @@
 import React from 'react';
 import ContentLoader from 'react-content-loader';
 
-const AnimeItemLoader = (props: any) => (
+export const AnimeItemLoader = (props: any) => (
   <ContentLoader
     speed={2}
     width={300}
@@ -13,5 +13,3 @@ const AnimeItemLoader = (props: any) => (
     <rect x="1" y="-1" rx="20" ry="20" width="300" height="360" />
   </ContentLoader>
 );
-
-export default AnimeItemLoader;

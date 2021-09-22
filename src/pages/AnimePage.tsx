@@ -4,15 +4,13 @@ import { useSelector } from 'react-redux';
 
 import { Container } from '../App';
 import { RootState } from '../redux';
-import {
-  AnimeAddBox,
-  AnimeEpisodes,
-  AnimePageInfo,
-  AnimeReviewsItem,
-  AnimeTrailer,
-} from '../components';
 import scrollTop from '../utils/scrollTop';
 import { device } from '../utils/deviceMedia';
+import { AnimeTrailer } from '../components/Anime/AnimeTrailer';
+import { AnimeAddBox } from '../components/Anime/AnimeAddBox';
+import { AnimePageInfo } from '../components/Anime/AnimePageInfo';
+import { AnimeEpisodes } from '../components/Anime/AnimeEpisodes';
+import { AnimeReviewsItem } from '../components/Anime/AnimeReviewsItem';
 
 interface IBlockOutInfo {
   show: boolean;

@@ -2,16 +2,18 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 
+import { AnimeSlider } from './AnimeSlider';
+import { AnimeItem } from './AnimeItem';
+import { AnimeItemLoader } from '../LoaderContent/AnimeItemLoader';
+import { AnimePaginator } from './AnimePaginator';
 import { RootState } from '../../redux';
 import { getFavoritesAnime, setAnimeId } from '../../redux/anime';
 import { Container } from '../../App';
-import { AnimeItem, AnimeItemLoader, AnimeSlider } from '..';
-import { AnimePaginator } from '../../components';
 import { device } from '../../utils/deviceMedia';
 import { ButtonWrapper } from '../Button';
 import { useHistory } from 'react-router';
 
-const Anime = () => {
+export const Anime = () => {
   const dispatch = useDispatch();
   const { animeFavoritesItems, isLoading } = useSelector((state: RootState) => state.anime);
   const { currentGenre, animeSearchValue } = useSelector((state: RootState) => state.filters);
@@ -53,8 +55,6 @@ const Anime = () => {
     </AnimeWrapper>
   );
 };
-
-export default Anime;
 
 const AnimeWrapper = styled.section`
   position: relative;

@@ -2,15 +2,18 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Slider from 'react-slick';
 
-import { AnimeItem, AnimeItemLoader } from '..';
 import { RootState } from '../../redux';
 import { getAnime } from '../../redux/anime';
+import { AnimeItemLoader } from '../LoaderContent/AnimeItemLoader';
+import { AnimeItem } from './AnimeItem';
 
 interface IAnimeSlider {
   onSelectAnime: (id: number) => void;
 }
 
-const AnimeSlider: React.FC<IAnimeSlider> = ({ onSelectAnime }) => {
+export const AnimeSlider: React.FC<IAnimeSlider> = React.memo(function AnimeSlider({
+  onSelectAnime,
+}) {
   const dispatch = useDispatch();
   const { animeItems, isLoading } = useSelector((state: RootState) => state.anime);
 
@@ -83,6 +86,4 @@ const AnimeSlider: React.FC<IAnimeSlider> = ({ onSelectAnime }) => {
             .map((_, index) => <AnimeItemLoader key={index} />)}
     </Slider>
   );
-};
-
-export default React.memo(AnimeSlider);
+});

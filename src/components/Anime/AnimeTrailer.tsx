@@ -13,7 +13,7 @@ interface IAnimeTrailer {
   visibleTrailer: boolean;
 }
 
-const AnimeTrailer: React.FC<IAnimeTrailer> = ({
+export const AnimeTrailer: React.FC<IAnimeTrailer> = ({
   youtubeVideoId,
   closeTrailer,
   visibleTrailer,
@@ -64,8 +64,6 @@ const AnimeTrailer: React.FC<IAnimeTrailer> = ({
     </AnimeTrailerWrapper>
   );
 };
-
-export default React.memo(AnimeTrailer);
 
 const AnimeTrailerWrapper = styled.div`
   position: relative;

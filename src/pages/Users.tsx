@@ -6,7 +6,7 @@ import { RootState } from '../redux';
 import { Container } from '../App';
 import { getUsers } from '../redux/users';
 import { UsersData } from '../interfaces/interfaces';
-import { UsersLoader } from '../components';
+import { UsersLoader } from '../components/LoaderContent/UsersLoader';
 
 import userPng from '../assets/img/empty-user.png';
 import loverSvg from '../assets/img/lover.svg';

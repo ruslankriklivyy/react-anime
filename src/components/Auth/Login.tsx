@@ -30,7 +30,7 @@ interface MyFormProps {
   toggleVisibleAuth: () => void;
 }
 
-const Login = withFormik<MyFormProps, FormValues>({
+export const Login = withFormik<MyFormProps, FormValues>({
   mapPropsToValues: (props) => {
     return {
       email: props.initialEmail || '',
@@ -53,5 +53,3 @@ const Login = withFormik<MyFormProps, FormValues>({
     props.toggleVisibleAuth();
   },
 })(LoginForm);
-
-export default Login;

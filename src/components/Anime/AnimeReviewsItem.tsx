@@ -9,7 +9,7 @@ import { getReviewsAnime } from '../../redux/anime';
 
 import loverSvg from '../../assets/img/lover.svg';
 
-const AnimeReviewsItem = () => {
+export const AnimeReviewsItem = () => {
   const dispatch = useDispatch();
   const { animeReviews, animeId } = useSelector((state: RootState) => state.anime);
 
@@ -32,8 +32,6 @@ const AnimeReviewsItem = () => {
     </AnimeInfoReviews>
   );
 };
-
-export default AnimeReviewsItem;
 
 const AnimeInfoReviews = styled.div`
   display: -webkit-box;

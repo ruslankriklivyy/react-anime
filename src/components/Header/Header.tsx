@@ -5,7 +5,6 @@ import { Link } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
 
 import { Container } from '../../App';
-import { Auth, BurgerMenu, Categories, HeaderActions, HeaderGenres } from '..';
 import { getGenres } from '../../redux/filters';
 import { RootState } from '../../redux';
 import { setIsAuth } from '../../redux/users';
@@ -13,12 +12,17 @@ import { setIsAuth } from '../../redux/users';
 import closeSvg from '../../assets/img/cancel.svg';
 import menuSvg from '../../assets/img/menu.svg';
 import { device } from '../../utils/deviceMedia';
+import { Categories } from '../Categories';
+import { BurgerMenu } from '../BurgerMenu';
+import { HeaderActions } from './HeaderActions';
+import { HeaderGenres } from './HeaderGenres';
+import { Auth } from '../Auth/Auth';
 
 interface IHeaderBottom {
   show: boolean;
 }
 
-const Header = () => {
+export const Header = () => {
   const dispatch = useDispatch();
   const { token, userInfo } = useSelector((state: RootState) => state.users);
 
@@ -111,8 +115,6 @@ const Header = () => {
     </HeaderWrapper>
   );
 };
-
-export default Header;
 
 const BurgerMenuButton = styled.button`
   display: none;

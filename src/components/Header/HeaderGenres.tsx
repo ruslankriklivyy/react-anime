@@ -10,7 +10,7 @@ interface IHeaderGenres {
   active: boolean;
 }
 
-const HeaderGenres = () => {
+export const HeaderGenres = React.memo(function HeaderGenres() {
   const dispatch = useDispatch();
   const { currentGenre, animeGenres } = useSelector((state: RootState) => state.filters);
 
@@ -30,9 +30,7 @@ const HeaderGenres = () => {
       ))}
     </>
   );
-};
-
-export default React.memo(HeaderGenres);
+});
 
 const HeaderGenre = styled.button`
   padding: 0 10px;

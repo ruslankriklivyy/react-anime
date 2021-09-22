@@ -8,15 +8,18 @@ import trashSvg from '../../assets/img/trash-white.svg';
 import plusSvg from '../../assets/img/plus.svg';
 import scrollTop from '../../utils/scrollTop';
 import { removeItemFromList, removeTypeFromList } from '../../redux/list';
-import { Button } from '..';
 import { device } from '../../utils/deviceMedia';
+import { Button } from '../Button';
 
 interface IAnimeInfoActions {
   setVisibleTrailer: (visible: boolean) => void;
   openAddBlock: () => void;
 }
 
-const AnimeInfoActions: React.FC<IAnimeInfoActions> = ({ setVisibleTrailer, openAddBlock }) => {
+export const AnimeInfoActions: React.FC<IAnimeInfoActions> = ({
+  setVisibleTrailer,
+  openAddBlock,
+}) => {
   const dispatch = useDispatch();
   const { addedItemsIds } = useSelector((state: RootState) => state.list);
   const { chosenAnime } = useSelector((state: RootState) => state.anime);
@@ -49,8 +52,6 @@ const AnimeInfoActions: React.FC<IAnimeInfoActions> = ({ setVisibleTrailer, open
     </AnimeInfoBottom>
   );
 };
-
-export default AnimeInfoActions;
 
 const AnimeInfoBottom = styled.div`
   display: flex;

@@ -1,7 +1,8 @@
 import React from 'react';
 import { Route } from 'react-router';
 import styled from 'styled-components';
-import { Anime, Header } from './components';
+import { Anime } from './components/Anime/Anime';
+import { Header } from './components/Header/Header';
 import { AnimeInfo, AnimeList, Users } from './pages';
 
 export const Container = styled.div`

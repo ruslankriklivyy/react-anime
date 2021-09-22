@@ -22,7 +22,7 @@ interface IHeaderActions {
   burgerMenu?: boolean;
 }
 
-const HeaderActions: React.FC<IHeaderActions> = ({ toggleVisibleAuth, burgerMenu }) => {
+export const HeaderActions: React.FC<IHeaderActions> = ({ toggleVisibleAuth, burgerMenu }) => {
   const dispatch = useDispatch();
   const animeSearchValue = useSelector((state: RootState) => state.filters.animeSearchValue);
   const isAuth = useSelector((state: RootState) => state.users.isAuth);
@@ -68,8 +68,6 @@ const HeaderActions: React.FC<IHeaderActions> = ({ toggleVisibleAuth, burgerMenu
     </HeaderActionWrapper>
   );
 };
-
-export default HeaderActions;
 
 export const HeaderActionWrapper = styled.div`
   @media ${device.laptopL} {

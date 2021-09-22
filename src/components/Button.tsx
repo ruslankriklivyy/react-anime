@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { device } from '../utils/deviceMedia';
 
-const Button = (props: any) => {
+export const Button = (props: any) => {
   return <ButtonWrapper {...props}>{props.children}</ButtonWrapper>;
 };
 
@@ -40,5 +40,3 @@ export const ButtonWrapper = styled.button`
     font-size: 16px;
   }
 `;
-
-export default Button;

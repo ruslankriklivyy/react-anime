@@ -9,7 +9,7 @@ import { getEpisodesAnime } from '../../redux/anime';
 
 import episodesEmptyJpg from '../../assets/img/episodes-empty.jpg';
 
-const AnimeEpisodes = () => {
+export const AnimeEpisodes = React.memo(function AnimeEpisodes() {
   const dispatch = useDispatch();
   const { episodesAnime, animeId } = useSelector((state: RootState) => state.anime);
 
@@ -80,9 +80,7 @@ const AnimeEpisodes = () => {
       )}
     </>
   );
-};
-
-export default React.memo(AnimeEpisodes);
+});
 
 const AnimeEpisodeNumber = styled.div`
   position: absolute;

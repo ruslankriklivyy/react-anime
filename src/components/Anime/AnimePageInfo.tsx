@@ -6,17 +6,21 @@ import { useCookies } from 'react-cookie';
 import starSvg from '../../assets/img/star.svg';
 import { RootState } from '../../redux';
 import { Box } from '../../pages/AnimePage';
-import { AnimeInfoActions, AnimeInfoLoader } from '..';
 import { Genres } from '../../interfaces/interfaces';
 import { getGenresAnime, getOneAnime, setAnimeId } from '../../redux/anime';
 import { device } from '../../utils/deviceMedia';
+import { AnimeInfoActions } from './AnimeInfoActions';
+import { AnimeInfoLoader } from '../LoaderContent/AnimeInfoLoader';
 
 interface IAnimePageInfo {
   openAddBlock: () => void;
   setVisibleTrailer: (visible: boolean) => void;
 }
 
-const AnimePageInfo: React.FC<IAnimePageInfo> = ({ openAddBlock, setVisibleTrailer }) => {
+export const AnimePageInfo: React.FC<IAnimePageInfo> = React.memo(function AnimePageInfo({
+  openAddBlock,
+  setVisibleTrailer,
+}) {
   const dispatch = useDispatch();
   const { chosenAnime, animeId, genresAnime, isLoadingInfo } = useSelector(
     (state: RootState) => state.anime,
@@ -76,9 +80,7 @@ const AnimePageInfo: React.FC<IAnimePageInfo> = ({ openAddBlock, setVisibleTrail
       )}
     </Box>
   );
-};
-
-export default React.memo(AnimePageInfo);
+});
 
 const AnimePageInfoWrapper = styled.div`
   display: flex;

@@ -11,7 +11,7 @@ interface ICategories {
   burgerMenu?: boolean;
 }
 
-const Categories: React.FC<ICategories> = ({
+export const Categories: React.FC<ICategories> = ({
   toggleVisibleGenres,
   onCloseBurgerMenu,
   burgerMenu,
@@ -32,13 +32,10 @@ const Categories: React.FC<ICategories> = ({
   );
 };
 
-export default Categories;
-
 export const CategoriesWrapper = styled.ul`
   display: flex;
   align-items: center;
   @media ${device.laptopL} {
-    /* display: none; */
     ${(props: any) => (props.burgerMenu ? 'display: block;' : 'display: none;')}
   }
   li {

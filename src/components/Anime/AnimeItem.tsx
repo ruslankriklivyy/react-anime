@@ -10,7 +10,7 @@ interface AnimeItemProps {
   selectItem: () => void;
 }
 
-const AnimeItem: React.FC<AnimeItemProps> = ({ item, selectItem }) => {
+export const AnimeItem: React.FC<AnimeItemProps> = ({ item, selectItem }) => {
   return (
     <>
       <AnimeItemWrapper onClick={selectItem}>
@@ -26,8 +26,6 @@ const AnimeItem: React.FC<AnimeItemProps> = ({ item, selectItem }) => {
     </>
   );
 };
-
-export default AnimeItem;
 
 const AnimeImage = styled.img`
   display: block;

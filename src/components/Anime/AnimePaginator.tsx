@@ -6,9 +6,9 @@ import arrowSvg from '../../assets/img/arrow.svg';
 import { RootState } from '../../redux';
 import { setCurrentPageNumber } from '../../redux/filters';
 import scrollTop from '../../utils/scrollTop';
-import Button from '../Button';
+import { Button } from '../Button';
 
-const AnimePaginator = () => {
+export const AnimePaginator = React.memo(function AnimePaginator() {
   const dispatch = useDispatch();
   let { currentPageNumber } = useSelector((state: RootState) => state.filters);
 
@@ -36,9 +36,7 @@ const AnimePaginator = () => {
       </Button>
     </AnimePaginatorWrapper>
   );
-};
-
-export default React.memo(AnimePaginator);
+});
 
 const AnimePaginatorWrapper = styled.div`
   display: flex;
